@@ -13,13 +13,24 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
+        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos",
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to use your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to use your microphone"
+      },
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shotajap120.ExpoAR",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -28,15 +39,25 @@
     },
     "plugins": [
       "expo-router",
-      // "expo-camera",
-      // {
-      //   "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-      //   "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-      //   "recordAudioAndroid": true
-      // }
+      [
+        "@reactvision/react-viro",
+        {
+          "android": {
+            "xRMode": "AR"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4b064b5d-0dc3-43e3-a103-29bf78066b86"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4b064b5d-0dc3-43e3-a103-29bf78066b86"
     }
   }
 }

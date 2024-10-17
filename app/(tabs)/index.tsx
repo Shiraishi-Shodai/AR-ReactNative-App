@@ -1,74 +1,51 @@
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
-import { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ViroARSceneNavigator } from "@reactvision/react-viro";
+import { Platform, Text, View } from "react-native";
+import ARView from "@/components/ARView";
+import { Camera } from "expo-camera";
 
-export default function App() {
-    const [facing, setFacing] = useState<CameraType>("back");
-    const [permission, requestPermission] = useCameraPermissions();
+const Home = () => {
+  const [isNavigatorReady, setNavigatorReady] = useState(false);
+  const [trackingState, setTrackingState] = useState("");
 
-    if (!permission) {
-        // Camera permissions are still loading.
-        return <View />;
+  useEffect(() => {
+    const requestPermissions = async () => {
+      if (Platform.OS === "android") {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          alert("カメラへのアクセスが必要です");
+        }
+      }
+    };
+    requestPermissions();
+  }, []);
+
+  const handleTrackingUpdated = (state) => {
+    if (state === "TRACKING") {
+      setTrackingState("トラッキング中");
+      setNavigatorReady(true); // 初期化完了を示す
+    } else if (state === "NOT_AVAILABLE") {
+      setTrackingState("トラッキング不可");
+    } else {
+      setTrackingState("トラッキング初期化中");
+      console.log(trackingState);
     }
+  };
 
-    if (!permission.granted) {
-        // Camera permissions are not granted yet.
-        return (
-            <View style={styles.container}>
-                <Text style={styles.message}>
-                    We need your permission to show the camera
-                </Text>
-                <Button onPress={requestPermission} title="grant permission" />
-            </View>
-        );
-    }
+  return (
+    <View>
+      {isNavigatorReady ? (
+        <ViroARSceneNavigator
+          initialScene={{
+            scene: () => <ARView onTrackingUpdated={handleTrackingUpdated} />,
+          }}
+        />
+      ) : (
+        <Text>AR初期化中...</Text>
+      )}
+      <Text>ARトラッキング状態: {trackingState}</Text>
+    </View>
+  );
+};
 
-    function toggleCameraFacing() {
-        setFacing((current) => (current === "back" ? "front" : "back"));
-    }
-
-    return (
-        <View style={styles.container}>
-            <CameraView style={styles.camera} facing={facing}>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={toggleCameraFacing}
-                    >
-                        <Text style={styles.text}>Flip Camera</Text>
-                    </TouchableOpacity>
-                </View>
-            </CameraView>
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-    },
-    message: {
-        textAlign: "center",
-        paddingBottom: 10,
-    },
-    camera: {
-        flex: 1,
-    },
-    buttonContainer: {
-        flex: 1,
-        flexDirection: "row",
-        backgroundColor: "transparent",
-        margin: 64,
-    },
-    button: {
-        flex: 1,
-        alignSelf: "flex-end",
-        alignItems: "center",
-    },
-    text: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "white",
-    },
-});
+export default Home;
