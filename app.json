@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ExpoAR",
-    "slug": "ExpoAR",
+    "slug": "expoar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shotajap120.ExpoAR",
+      "package": "com.shota2.expoar",
       "runtimeVersion": "1.0.0"
     },
     "web": {
@@ -53,11 +53,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4b064b5d-0dc3-43e3-a103-29bf78066b86"
+        "projectId": "eec6ed03-6c90-4075-bd08-2900b5065909"
       }
     },
     "updates": {
       "url": "https://u.expo.dev/4b064b5d-0dc3-43e3-a103-29bf78066b86"
-    }
+    },
+    "owner": "shota2"
   }
 }

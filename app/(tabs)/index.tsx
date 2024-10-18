@@ -1,51 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import { Platform, Text, View } from "react-native";
-import ARView from "@/components/ARView";
+import {
+  ViroARScene,
+  ViroARSceneNavigator,
+  ViroText,
+  ViroTrackingReason,
+  ViroTrackingStateConstants,
+} from "@reactvision/react-viro";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { Camera } from "expo-camera";
 
-const Home = () => {
-  const [isNavigatorReady, setNavigatorReady] = useState(false);
-  const [trackingState, setTrackingState] = useState("");
+const HelloWorldSceneAR = () => {
+  const [text, setText] = useState("Initializing AR...");
 
-  useEffect(() => {
-    const requestPermissions = async () => {
-      if (Platform.OS === "android") {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        if (status !== "granted") {
-          alert("カメラへのアクセスが必要です");
-        }
-      }
-    };
-    requestPermissions();
-  }, []);
-
-  const handleTrackingUpdated = (state) => {
-    if (state === "TRACKING") {
-      setTrackingState("トラッキング中");
-      setNavigatorReady(true); // 初期化完了を示す
-    } else if (state === "NOT_AVAILABLE") {
-      setTrackingState("トラッキング不可");
-    } else {
-      setTrackingState("トラッキング初期化中");
-      console.log(trackingState);
+  function onInitialized(state: any, reason: ViroTrackingReason) {
+    console.log("onInitialized", state, reason);
+    if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
+      setText("Hello Masumoto!");
+    } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
+      // Handle loss of tracking
     }
-  };
+  }
 
   return (
-    <View>
-      {isNavigatorReady ? (
-        <ViroARSceneNavigator
-          initialScene={{
-            scene: () => <ARView onTrackingUpdated={handleTrackingUpdated} />,
-          }}
-        />
-      ) : (
-        <Text>AR初期化中...</Text>
-      )}
-      <Text>ARトラッキング状態: {trackingState}</Text>
-    </View>
+    <ViroARScene onTrackingUpdated={onInitialized}>
+      <ViroText
+        text={text}
+        scale={[0.5, 0.5, 0.5]}
+        position={[0, 0, -1]}
+        style={styles.helloWorldTextStyle}
+      />
+    </ViroARScene>
   );
 };
 
-export default Home;
+export default () => {
+  return (
+    <ViroARSceneNavigator
+      autofocus={true}
+      initialScene={{
+        scene: HelloWorldSceneAR,
+      }}
+      style={styles.f1}
+    />
+  );
+};
+
+var styles = StyleSheet.create({
+  f1: { flex: 1 },
+  helloWorldTextStyle: {
+    fontFamily: "Arial",
+    fontSize: 30,
+    color: "#ffffff",
+    textAlignVertical: "center",
+    textAlign: "center",
+  },
+});
