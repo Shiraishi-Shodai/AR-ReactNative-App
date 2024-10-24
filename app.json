@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ExpoAR",
-    "slug": "expoar",
+    "slug": "ar-community",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shota2.expoar",
+      "package": "com.na7ti.ExpoAR",
       "runtimeVersion": "1.0.0"
     },
     "web": {
@@ -53,12 +53,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "eec6ed03-6c90-4075-bd08-2900b5065909"
+        "projectId": "f0036637-57a4-4010-9e8b-a563859f8ba3"
       }
     },
     "updates": {
       "url": "https://u.expo.dev/4b064b5d-0dc3-43e3-a103-29bf78066b86"
     },
-    "owner": "shota2"
+    "owner": "expoar-dev-team"
   }
 }

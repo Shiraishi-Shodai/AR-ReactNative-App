@@ -1,25 +1,23 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Image, Platform, Text, View } from "react-native";
+import {
+    ViroARScene,
+    ViroARSceneNavigator,
+    ViroText,
+} from "@reactvision/react-viro";
 
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+export default () => {
+    return (
+        <ViroARScene>
+            <ViroText text="hh" />
+        </ViroARScene>
+    );
+};
 
-export default function TabTwoScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello World</Text>
-    </View>
-  );
-}
+import database from "@react-native-firebase/database";
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    backgroundColor: "red",
-  },
-});
+database()
+    .ref("/users/123")
+    .set({
+        name: "Ada Lovelace",
+        age: 31,
+    })
+    .then(() => console.log("Data set."));

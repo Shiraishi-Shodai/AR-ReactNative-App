@@ -1,4 +1,4 @@
-package com.shotajap120.ExpoAR
+package com.na7ti.ExpoAR
 
 import android.os.Build
 import android.os.Bundle

@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24') // FIXME: 23を24に変更
+        minSdkVersion = 24
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
         kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.23'
@@ -15,9 +15,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // FIXME: classpath('com.android.tools.build:gradle')からclasspath('com.android.tools.build:gradle:4.1.1')に変更
-        // classpath('com.android.tools.build:gradle') 
-        classpath('com.android.tools.build:gradle:4.1.1')
+        classpath('com.android.tools.build:gradle')
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
     }

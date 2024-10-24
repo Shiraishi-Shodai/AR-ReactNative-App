@@ -1,4 +1,5 @@
-package com.shotajap120.ExpoAR
+package com.na7ti.ExpoAR
+import com.viromedia.bridge.ReactViroPackage
 
 import android.app.Application
 import android.content.res.Configuration
@@ -15,26 +16,18 @@ import com.facebook.soloader.SoLoader
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
-// FIXME: import文を追加
-import com.viromedia.bridge.ReactViroPackage
-
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(
         this,
         object : DefaultReactNativeHost(this) {
-          override fun getPackages(): List<ReactPackage> {
-            // Packages that cannot be autolinked yet can be added manually here, for example:
-            // packages.add(new MyReactNativePackage());
+          override fun getPackages(): List<ReactPackage> =
+            PackageList(this).packages.apply {
+              // Packages that cannot be autolinked yet can be added manually here, for example:
+              // add(MyReactNativePackage())
+              add(ReactViroPackage(ReactViroPackage.ViroPlatform.AR))
 
-            // FIXME: 下の行を追加
-            val packages = PackageList(this).packages
-            packages.add(ReactViroPackage(ReactViroPackage.ViroPlatform.valueOf("AR")))
-
-            // FIXEME: 返り値をローカル変数packagesに変更
-            //return PackageList(this).packages
-            return packages
-          }
+            }
 
           override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"
 
@@ -62,6 +55,4 @@ class MainApplication : Application(), ReactApplication {
     super.onConfigurationChanged(newConfig)
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig)
   }
-
-  
 }
