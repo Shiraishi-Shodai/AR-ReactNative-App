@@ -7,3 +7,5 @@
 	<ViroText text="Hello World!">
 </ViroARScene>
 ```
+
+## 緯度経度によるオブジェクトの固定

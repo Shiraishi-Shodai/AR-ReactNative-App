@@ -20,4 +20,4 @@ import { firebase, FirebaseApp } from "@react-native-firebase/database";
     ? firebase.initializeApp(firebaseConfig)
     : firebase.app()) as FirebaseApp;
 
-console.log(firebase);
+// console.log(firebase);
