@@ -1,24 +1,25 @@
 {
   "project_info": {
     "project_number": "388533406260",
+    "firebase_url": "https://devproject-8f5ab-default-rtdb.firebaseio.com",
     "project_id": "devproject-8f5ab",
-    "storage_bucket": "devproject-8f5ab.appspot.com"
+    "storage_bucket": "devproject-8f5ab.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:388533406260:android:00e009fc579a3f526a1861",
+        "mobilesdk_app_id": "1:388533406260:android:6a6d9cdc53823cc66a1861",
         "android_client_info": {
-          "package_name": "com.school.androidapp"
+          "package_name": "com.expoardevteam.arcommunity"
         }
       },
       "oauth_client": [
         {
-          "client_id": "388533406260-1fihqm9v74kler2usddgg504883ptn1n.apps.googleusercontent.com",
+          "client_id": "388533406260-3mbr1hs8q89p1l33f08n4kekdo57ii7f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.school.androidapp",
-            "certificate_hash": "9c1026665a866e634c1c97c67d486a6c0e8b9b73"
+            "package_name": "com.expoardevteam.arcommunity",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {

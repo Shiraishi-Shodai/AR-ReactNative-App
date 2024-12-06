@@ -109,9 +109,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.na7ti.ExpoAR'
+    namespace 'com.expoardevteam.arcommunity'
     defaultConfig {
-        applicationId 'com.na7ti.ExpoAR'
+        applicationId 'com.expoardevteam.arcommunity'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -184,6 +184,20 @@ dependencies {
     // ========================================================================
     
 
+    // =====================================r===================================
+    // https://viro-community.readme.io/docs/installation-instructions#2-in-your-androidappbuildgradle-add-the-following-lines-to-the-dependencies-section
+    implementation project(':gvr_common')
+    implementation project(':arcore_client')
+    implementation project(path: ':react_viro')
+    implementation project(path: ':viro_renderer')
+    implementation 'androidx.media3:media3-exoplayer:1.1.1'
+    implementation 'androidx.media3:media3-exoplayer-dash:1.1.1'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.1.1'
+    implementation 'androidx.media3:media3-exoplayer-smoothstreaming:1.1.1'
+    implementation 'com.google.protobuf.nano:protobuf-javanano:3.1.0'
+    // ========================================================================
+    
+
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
     def isWebpAnimatedEnabled = (findProperty('expo.webp.animated') ?: "") == "true";
@@ -213,3 +227,5 @@ if (rnVersion < versionToNumber(0, 75, 0)) {
     apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
     applyNativeModulesAppBuildGradle(project)
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -29,8 +29,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.na7ti.ExpoAR",
-      "runtimeVersion": "1.0.0"
+      "package": "com.expoardevteam.arcommunity",
+      "runtimeVersion": "1.0.0",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -46,7 +47,8 @@
             "xRMode": "AR"
           }
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true
