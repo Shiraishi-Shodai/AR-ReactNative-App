@@ -72,6 +72,8 @@ export default () => {
       case State.CANCELLED: // 長押し中に移動可能な範囲を超えた時
         // モーダルを閉じる
         setModalVisible(false);
+        break;
+      default:
     }
   };
 
