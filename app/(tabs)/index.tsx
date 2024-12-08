@@ -8,6 +8,7 @@ import ControllerModal from "@/components/ControllerModal";
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import TextInputModal from "@/components/TextInputModal";
 import StampModal from "@/components/StampModal";
+import UserIcon from "@/components/UserIcon";
 
 export default () => {
   const { user } = useContext(AuthContext);
@@ -110,6 +111,7 @@ export default () => {
       onGestureEvent={handleActiveGesture} // 長押し中に指が移動するたびに発火する
     >
       <View style={styles.container}>
+        <UserIcon userIconStyles={userIconStyles} />
         <ViroARSceneNavigator
           autofocus={true}
           initialScene={{
@@ -144,6 +146,24 @@ export default () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+});
+
+const userIconStyles = StyleSheet.create({
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    position: "relative",
+    top: "7%",
+    left: "83%",
     backgroundColor: "red",
+    alignItems: "stretch",
+    zIndex: 1,
+  },
+  iconSize: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
 });
