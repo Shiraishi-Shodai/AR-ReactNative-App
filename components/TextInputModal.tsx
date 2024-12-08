@@ -12,7 +12,11 @@ const TextInputModal = () => {
   // Modalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(true);
   return (
-    <Modal transparent={true} visible={modlaVisible}>
+    <Modal
+      transparent={true}
+      visible={modlaVisible}
+      statusBarTranslucent={true}
+    >
       {/* 背景をタップするとモーダルを閉じる */}
       <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
         <View style={styles.overlay}>

@@ -21,7 +21,11 @@ const ControllerModal = ({
   absoluteArea,
 }: ControllerModalProps) => {
   return (
-    <Modal transparent={true} visible={modlaVisible}>
+    <Modal
+      transparent={true}
+      visible={modlaVisible}
+      statusBarTranslucent={true}
+    >
       <View
         style={[
           styles.popup,
