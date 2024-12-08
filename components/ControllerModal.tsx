@@ -1,6 +1,8 @@
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import React, { SetStateAction } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 interface ControllerModalProps {
   modlaVisible: boolean;
@@ -45,7 +47,7 @@ const ControllerModal = ({
             absoluteArea === AbsoluteAreaEnum.Upper && { opacity: 0.5 },
           ]}
         >
-          <Text style={styles.text}>スタンプ</Text>
+          <FontAwesome6 name="smile" size={24} color="black" />
         </View>
         {/* 下半分 */}
         <View
@@ -54,7 +56,7 @@ const ControllerModal = ({
             absoluteArea === AbsoluteAreaEnum.Lower && { opacity: 0.5 },
           ]}
         >
-          <Text style={styles.text}>テキスト</Text>
+          <Ionicons name="text" size={24} color="black" />
         </View>
       </View>
     </Modal>
