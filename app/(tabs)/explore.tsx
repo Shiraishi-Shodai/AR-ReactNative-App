@@ -1,23 +1,11 @@
-import {
-  ViroARScene,
-  ViroARSceneNavigator,
-  ViroText,
-} from "@reactvision/react-viro";
+import { Text, View } from "react-native";
 
-export default () => {
+const Explore = () => {
   return (
-    <ViroARScene>
-      <ViroText text="hh" />
-    </ViroARScene>
+    <View style={{ flex: 1, backgroundColor: "blue" }}>
+      <Text>Hello</Text>
+    </View>
   );
 };
 
-// import database from "@react-native-firebase/database";
-
-// database()
-//     .ref("/users/123")
-//     .set({
-//         name: "Ada Lovelace",
-//         age: 31,
-//     })
-//     .then(() => console.log("Data set."));
+export default Explore;

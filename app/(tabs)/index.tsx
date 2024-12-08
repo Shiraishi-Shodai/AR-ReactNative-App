@@ -10,7 +10,7 @@ import TextInputModal from "@/components/TextInputModal";
 import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
 
-export default () => {
+const HomeScreen = () => {
   const { user } = useContext(AuthContext);
   // ControllModalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(false);
@@ -143,9 +143,14 @@ export default () => {
   );
 };
 
+export default HomeScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "green",
+    flexDirection: "column",
+    alignItems: "stretch",
   },
 });
 
@@ -154,11 +159,9 @@ const userIconStyles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    position: "relative",
+    position: "absolute",
     top: "7%",
     left: "83%",
-    backgroundColor: "red",
-    alignItems: "stretch",
     zIndex: 1,
   },
   iconSize: {

@@ -13,6 +13,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import AuthProvider from "@/components/AuthProvider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
+import { StatusBar } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,11 +38,9 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <AuthProvider>
+          <StatusBar translucent={true} />
           <Stack
             screenOptions={{
-              headerStyle: {
-                // backgroundColor: "gray",
-              },
               headerShown: false,
             }}
           >
