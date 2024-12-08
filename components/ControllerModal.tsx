@@ -1,23 +1,24 @@
+import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import React, { SetStateAction } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 
 interface ControllerModalProps {
   modlaVisible: boolean;
-  setModalVisible: React.Dispatch<SetStateAction<boolean>>;
   x: number;
   y: number;
   width: number;
   height: number;
   radius: number;
+  absoluteArea: AbsoluteAreaEnum;
 }
 const ControllerModal = ({
   modlaVisible,
-  setModalVisible,
   x,
   y,
   width,
   height,
   radius,
+  absoluteArea,
 }: ControllerModalProps) => {
   return (
     <Modal transparent={true} visible={modlaVisible}>
@@ -34,11 +35,21 @@ const ControllerModal = ({
         ]}
       >
         {/*  上半分 */}
-        <View style={styles.upperHalf}>
+        <View
+          style={[
+            styles.upperHalf,
+            absoluteArea === AbsoluteAreaEnum.Upper && { opacity: 0.5 },
+          ]}
+        >
           <Text style={styles.text}>上半分</Text>
         </View>
         {/* 下半分 */}
-        <View style={[styles.lowerHalf]}>
+        <View
+          style={[
+            styles.lowerHalf,
+            absoluteArea === AbsoluteAreaEnum.Lower && { opacity: 0.5 },
+          ]}
+        >
           <Text style={styles.text}>下半分</Text>
         </View>
       </View>
@@ -51,7 +62,7 @@ export default ControllerModal;
 const styles = StyleSheet.create({
   popup: {
     position: "absolute", // 画面全体を起点として位置を指定するためにabsoluteとする
-    backgroundColor: "black",
+    backgroundColor: "white",
     overflow: "hidden", // はみ出した子要素は表示しない
   },
   popupText: {
