@@ -41,7 +41,7 @@ const ControllerModal = ({
             absoluteArea === AbsoluteAreaEnum.Upper && { opacity: 0.5 },
           ]}
         >
-          <Text style={styles.text}>上半分</Text>
+          <Text style={styles.text}>スタンプ</Text>
         </View>
         {/* 下半分 */}
         <View
@@ -50,7 +50,7 @@ const ControllerModal = ({
             absoluteArea === AbsoluteAreaEnum.Lower && { opacity: 0.5 },
           ]}
         >
-          <Text style={styles.text}>下半分</Text>
+          <Text style={styles.text}>テキスト</Text>
         </View>
       </View>
     </Modal>

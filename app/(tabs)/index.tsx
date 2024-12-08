@@ -1,31 +1,35 @@
 import React, { useContext, useState } from "react";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import HomeScene from "@/components/HomeScene";
 import { AuthContext } from "@/components/AuthProvider";
 import { LongPressGestureHandler, State } from "react-native-gesture-handler";
 import ControllerModal from "@/components/ControllerModal";
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
+import TextInputModal from "@/components/TextInputModal";
+import StampModal from "@/components/StampModal";
 
 export default () => {
   const { user } = useContext(AuthContext);
-  // モーダルの表示非表示をコントロールするステート
+  // ControllModalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(false);
   // 押した場所を保持
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // 座標を管理
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   // スクリーンのサイズを取得(ピクセル単位)
-  const { height, width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
+  // 指が今どこにいるか？
+  const [absoluteArea, setAbsoluteArea] = useState<AbsoluteAreaEnum>(
+    AbsoluteAreaEnum.Upper
+  );
+  // 長押しが解除されたか？
+  const [isLongPressEND, setIsLongPressEND] = useState(false);
+
   // コントロールを表示するエリアの大きさ
   const controllArea = {
     width: 200,
     height: 200,
     radius: 100,
   };
-
-  // 指が今どこにいるか？
-  const [absoluteArea, setAbsoluteArea] = useState<AbsoluteAreaEnum>(
-    AbsoluteAreaEnum.Upper
-  );
 
   // 指がどこにコントロールエリアのどこに置かれているかを返却
   const whereAbsoluteArea = (absoluteX: number, absoluteY: number) => {
@@ -58,6 +62,8 @@ export default () => {
 
   // 長押しの状態が変化したときの処理
   const handleStateChange = (event: any) => {
+    // isLongPressENDがtrueの時、falseにする
+    if (isLongPressEND) setIsLongPressEND(false);
     // 指の状態、指の位置のX座標、指の位置のY座標
     const { state, absoluteX, absoluteY } = event.nativeEvent;
 
@@ -72,7 +78,10 @@ export default () => {
         setModalVisible(true);
         break;
       case State.END: // 長押しをして指を離したとき
-        const res = whereAbsoluteArea(absoluteX, absoluteY);
+        const res: AbsoluteAreaEnum = whereAbsoluteArea(absoluteX, absoluteY);
+        setAbsoluteArea(res);
+        // 長押しが終わったという状態に更新
+        setIsLongPressEND(true);
         // モーダルを閉じる
         setModalVisible(false);
         break;
@@ -118,6 +127,15 @@ export default () => {
           radius={controllArea.radius}
           absoluteArea={absoluteArea}
         />
+
+        {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
+          // スタンプ追加モーダルを表示
+          <StampModal />
+        )}
+        {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Lower && (
+          // テキスト追加モーダルを表示
+          <TextInputModal />
+        )}
       </View>
     </LongPressGestureHandler>
   );
@@ -126,5 +144,6 @@ export default () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "red",
   },
 });
