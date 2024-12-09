@@ -21,9 +21,12 @@ import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import TextInputModal from "@/components/TextInputModal";
 import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { runOnJS } from "react-native-reanimated";
 
 const HomeScreen = () => {
+  const router = useRouter();
+
   // ControllModalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(false);
   // 押した場所を保持
@@ -49,7 +52,8 @@ const HomeScreen = () => {
   };
 
   // ユーザーアイコンをタップするジェスチャー
-  const tap = Gesture.Tap().onEnd(() => console.log("タップされました"));
+  const routing = () => router.push("/setting");
+  const tap = Gesture.Tap().onEnd(runOnJS(routing));
 
   // 指がどこにコントロールエリアのどこに置かれているかを返却
   const whereAbsoluteArea = (absoluteX: number, absoluteY: number) => {
@@ -169,7 +173,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
     flexDirection: "column",
     alignItems: "stretch",
   },
