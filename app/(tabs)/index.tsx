@@ -11,13 +11,15 @@ import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
 
 const HomeScreen = () => {
-  const { user } = useContext(AuthContext);
   // ControllModalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(false);
   // 押した場所を保持
   const [position, setPosition] = useState({ x: 0, y: 0 });
   // スクリーンのサイズを取得(ピクセル単位)
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
+  const screenHeight = height;
+  const screenWidth = width;
+
   // 指が今どこにいるか？
   const [absoluteArea, setAbsoluteArea] = useState<AbsoluteAreaEnum>(
     AbsoluteAreaEnum.Upper
@@ -25,11 +27,12 @@ const HomeScreen = () => {
   // 長押しが解除されたか？
   const [isLongPressEND, setIsLongPressEND] = useState(false);
 
-  // コントロールを表示するエリアの大きさ
+  // コントロールを表示するエリアの大きさ(直径をデバイスの幅の0)
+  const controllAreaDiameter = screenWidth * 0.5;
   const controllArea = {
-    width: 200,
-    height: 200,
-    radius: 100,
+    width: controllAreaDiameter,
+    height: controllAreaDiameter,
+    radius: controllAreaDiameter / 2,
   };
 
   // 指がどこにコントロールエリアのどこに置かれているかを返却
@@ -105,7 +108,7 @@ const HomeScreen = () => {
 
   return (
     <LongPressGestureHandler
-      maxDist={height} // スクリーンの高さに調整することで実質どこに指を動かしてもキャンセルにならないようにする
+      maxDist={screenHeight} // スクリーンの高さに調整することで実質どこに指を動かしてもキャンセルにならないようにする
       onHandlerStateChange={handleStateChange} // 長押ししている状態が変わるたびに発火する
       minDurationMs={500} // 長押しとみなす時間（ミリ秒）
       onGestureEvent={handleActiveGesture} // 長押し中に指が移動するたびに発火する
