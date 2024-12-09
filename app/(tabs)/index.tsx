@@ -1,14 +1,27 @@
 import React, { useContext, useState } from "react";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import HomeScene from "@/components/HomeScene";
 import { AuthContext } from "@/components/AuthProvider";
-import { LongPressGestureHandler, State } from "react-native-gesture-handler";
+import {
+  Gesture,
+  GestureDetector,
+  LongPressGestureHandler,
+  State,
+} from "react-native-gesture-handler";
 import ControllerModal from "@/components/ControllerModal";
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import TextInputModal from "@/components/TextInputModal";
 import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
+import { Link } from "expo-router";
 
 const HomeScreen = () => {
   // ControllModalの表示非表示をコントロールするステート
@@ -34,6 +47,9 @@ const HomeScreen = () => {
     height: controllAreaDiameter,
     radius: controllAreaDiameter / 2,
   };
+
+  // ユーザーアイコンをタップするジェスチャー
+  const tap = Gesture.Tap().onEnd(() => console.log("タップされました"));
 
   // 指がどこにコントロールエリアのどこに置かれているかを返却
   const whereAbsoluteArea = (absoluteX: number, absoluteY: number) => {
@@ -114,7 +130,9 @@ const HomeScreen = () => {
       onGestureEvent={handleActiveGesture} // 長押し中に指が移動するたびに発火する
     >
       <View style={styles.container}>
-        <UserIcon userIconStyles={userIconStyles} />
+        <GestureDetector gesture={tap}>
+          <UserIcon userIconStyles={userIconStyles} />
+        </GestureDetector>
         <ViroARSceneNavigator
           autofocus={true}
           initialScene={{
