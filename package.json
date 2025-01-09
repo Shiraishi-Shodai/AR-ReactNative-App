@@ -23,6 +23,7 @@
     "@react-native-firebase/database": "^21.0.0",
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/native": "^6.0.2",
+    "@react-navigation/stack": "^6.4.1",
     "@reactvision/react-viro": "^2.41.6",
     "expo": "~51.0.38",
     "expo-camera": "~15.0.16",

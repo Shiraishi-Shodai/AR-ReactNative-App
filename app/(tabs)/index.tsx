@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
 import {
   Pressable,
@@ -23,12 +23,15 @@ import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
 import { Link, useRouter } from "expo-router";
 import { runOnJS } from "react-native-reanimated";
+import Setting from "@/components/Setting";
 
 const HomeScreen = () => {
   const router = useRouter();
 
   // ControllModalの表示非表示をコントロールするステート
-  const [modlaVisible, setModalVisible] = useState<boolean>(false);
+  const [controllModalVisible, setControllModalVisible] = useState<boolean>(false);
+    // SettingModalの表示非表示をコントロールするステート
+    const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
   // 押した場所を保持
   const [position, setPosition] = useState({ x: 0, y: 0 });
   // スクリーンのサイズを取得(ピクセル単位)
@@ -49,11 +52,13 @@ const HomeScreen = () => {
     width: controllAreaDiameter,
     height: controllAreaDiameter,
     radius: controllAreaDiameter / 2,
-  };
+  };  
 
   // ユーザーアイコンをタップするジェスチャー
-  const routing = () => router.push("/setting");
-  const tap = Gesture.Tap().onEnd(runOnJS(routing));
+  const showSettingModal = () => {
+    setSettingModalVisible(true)
+  };
+  const tap = Gesture.Tap().onEnd(runOnJS(showSettingModal));
 
   // 指がどこにコントロールエリアのどこに置かれているかを返却
   const whereAbsoluteArea = (absoluteX: number, absoluteY: number) => {
@@ -99,7 +104,7 @@ const HomeScreen = () => {
           y: absoluteY - controllArea.height / 2,
         });
         // モーダルを表示する
-        setModalVisible(true);
+        setControllModalVisible(true);
         break;
       case State.END: // 長押しをして指を離したとき
         const res: AbsoluteAreaEnum = whereAbsoluteArea(absoluteX, absoluteY);
@@ -107,11 +112,11 @@ const HomeScreen = () => {
         // 長押しが終わったという状態に更新
         setIsLongPressEND(true);
         // モーダルを閉じる
-        setModalVisible(false);
+        setControllModalVisible(false);
         break;
       case State.CANCELLED: // 長押し中に移動可能な範囲を超えた時
         // モーダルを閉じる
-        setModalVisible(false);
+        setControllModalVisible(false);
         break;
       default:
     }
@@ -143,10 +148,11 @@ const HomeScreen = () => {
             scene: HomeScene,
           }}
           style={{ flex: 1 }}
+
         />
 
         <ControllerModal
-          modlaVisible={modlaVisible}
+          modlaVisible={controllModalVisible}
           x={position.x}
           y={position.y}
           width={controllArea.width}
@@ -155,6 +161,9 @@ const HomeScreen = () => {
           absoluteArea={absoluteArea}
         />
 
+          
+            {/* //設定モーダルを表示 */}
+            <Setting settingModalVisible={settingModalVisible} setSettingModalVisible={setSettingModalVisible}/>
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
           // スタンプ追加モーダルを表示
           <StampModal />
@@ -180,9 +189,6 @@ const styles = StyleSheet.create({
 
 const userIconStyles = StyleSheet.create({
   iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
     position: "absolute",
     top: "7%",
     left: "83%",
