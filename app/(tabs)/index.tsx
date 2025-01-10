@@ -24,14 +24,17 @@ import UserIcon from "@/components/UserIcon";
 import { Link, useRouter } from "expo-router";
 import { runOnJS } from "react-native-reanimated";
 import Setting from "@/components/Setting";
+import StampView from "@/components/StampView";
 
 const HomeScreen = () => {
   const router = useRouter();
 
   // ControllModalの表示非表示をコントロールするステート
-  const [controllModalVisible, setControllModalVisible] = useState<boolean>(false);
-    // SettingModalの表示非表示をコントロールするステート
-    const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
+  const [controllModalVisible, setControllModalVisible] =
+    useState<boolean>(false);
+  // SettingModalの表示非表示をコントロールするステート
+  const [settingModalVisible, setSettingModalVisible] =
+    useState<boolean>(false);
   // 押した場所を保持
   const [position, setPosition] = useState({ x: 0, y: 0 });
   // スクリーンのサイズを取得(ピクセル単位)
@@ -52,11 +55,11 @@ const HomeScreen = () => {
     width: controllAreaDiameter,
     height: controllAreaDiameter,
     radius: controllAreaDiameter / 2,
-  };  
+  };
 
   // ユーザーアイコンをタップするジェスチャー
   const showSettingModal = () => {
-    setSettingModalVisible(true)
+    setSettingModalVisible(true);
   };
   const tap = Gesture.Tap().onEnd(runOnJS(showSettingModal));
 
@@ -148,7 +151,6 @@ const HomeScreen = () => {
             scene: HomeScene,
           }}
           style={{ flex: 1 }}
-
         />
 
         <ControllerModal
@@ -161,12 +163,14 @@ const HomeScreen = () => {
           absoluteArea={absoluteArea}
         />
 
-          
-            {/* //設定モーダルを表示 */}
-            <Setting settingModalVisible={settingModalVisible} setSettingModalVisible={setSettingModalVisible}/>
+        {/* //設定モーダルを表示 */}
+        <Setting
+          settingModalVisible={settingModalVisible}
+          setSettingModalVisible={setSettingModalVisible}
+        />
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
           // スタンプ追加モーダルを表示
-          <StampModal />
+          <StampView />
         )}
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Lower && (
           // テキスト追加モーダルを表示
