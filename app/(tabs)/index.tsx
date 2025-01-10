@@ -5,8 +5,12 @@ import { StyleSheet, Text, View } from "react-native";
 import HomeScene from "@/components/HomeScene";
 import { AuthContext } from "@/components/AuthProvider";
 import LogOutButton from "@/components/LogoutButton";
+import { StampManager } from "@/classies/StampManager";
+import StampView from "@/components/StampView";
 
 export default () => {
+  const sm = new StampManager()
+  console.log(sm.getARojects())
   const { user } = useContext(AuthContext);
   return (
     // <ViroARSceneNavigator
