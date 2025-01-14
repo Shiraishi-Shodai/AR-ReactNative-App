@@ -24,7 +24,6 @@ import UserIcon from "@/components/UserIcon";
 import { Link, useRouter } from "expo-router";
 import { runOnJS } from "react-native-reanimated";
 import Setting from "@/components/Setting";
-import StampView from "@/components/StampView";
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -170,7 +169,7 @@ const HomeScreen = () => {
         />
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
           // スタンプ追加モーダルを表示
-          <StampView />
+          <StampModal />
         )}
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Lower && (
           // テキスト追加モーダルを表示

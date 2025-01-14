@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { Stamp } from "@/classies/Stamp";
+import { StampManager } from "@/classies/StampManager";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -11,6 +13,18 @@ import {
 const StampModal = () => {
   // Modalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(true);
+  const stampManager = new StampManager();
+  const [stampArray, setStampArray] = useState<Stamp[]>([]);
+
+  useEffect(() => {
+    // 即時実行関数(IIFE)を使用する
+    (async () => {
+      const result = await stampManager.getARObjects();
+      console.log(result);
+      setStampArray([...result]);
+    })();
+  }, []);
+
   return (
     <Modal
       transparent={true}
