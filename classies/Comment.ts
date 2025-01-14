@@ -53,5 +53,5 @@ export class Comment extends ARObject {
   }
 
   // 編集
-  public edit(text: string): void {}
+  async editARObject(object: ARObject): Promise<void> {}
 }

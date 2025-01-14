@@ -1,35 +1,25 @@
-import { Stamp } from "@/classies/Stamp";
-import { StampManager } from "@/classies/StampManager";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   StyleSheet,
-  Text,
   TouchableWithoutFeedback,
   View,
-  Pressable,
   useWindowDimensions,
-  ListRenderItemInfo,
 } from "react-native";
-import SwipeToDelete from "./SwipeToDelete";
-import EntypoIcon from "react-native-vector-icons/Entypo";
-import AntIcon from "react-native-vector-icons/AntDesign";
+import MyStampList from "./MyStampList";
+import { ModalModeEnum } from "@/constants/ModalModeEnum";
+import InputStamp from "./InputStamp";
 
 const StampModal = () => {
   // Modalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(true);
-  const stampManager = new StampManager();
-  const [stampArray, setStampArray] = useState<Stamp[]>([]);
+  // デバイスの画面の幅と高さを取得
   const { width, height } = useWindowDimensions();
-  const [modalHeight, setModalHeight] = useState<number>(height * 0.5);
-
-  useEffect(() => {
-    // 即時実行関数(IIFE)を使用する
-    (async () => {
-      const result = await stampManager.getARObjects();
-      setStampArray([...result]);
-    })();
-  }, []);
+  // このモーダル内で自分が投稿したリストを表示するのかそれともスタンプ追加画面を表示するのかを管理するState。
+  // デフォルトでは投稿一覧を表示するためModalModeEnum.MyListとする
+  const [modalMode, setModalMode] = useState<ModalModeEnum>(
+    ModalModeEnum.MyList
+  );
 
   return (
     <Modal
@@ -40,58 +30,20 @@ const StampModal = () => {
       {/* 背景をタップするとモーダルを閉じる */}
       <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
         <View style={[styles.overlay]}>
-          <Pressable
-            style={[styles.plusView, { top: height * 0.43, left: width * 0.8 }]}
-          >
-            <AntIcon name="pluscircle" color="#2C7CFF" size={width * 0.15} />
-            <AntIcon
-              name="plus"
-              size={width * 0.15}
-              color="white"
-              style={{ position: "absolute" }}
+          {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
+          {modalMode == ModalModeEnum.MyList ? (
+            <MyStampList
+              width={width}
+              height={height}
+              setModalMode={setModalMode}
             />
-          </Pressable>
-          {/* モーダルコンテンツ */}
-          <TouchableWithoutFeedback>
-            <View
-              style={[
-                { width: width, height: modalHeight },
-                styles.modalContent,
-              ]}
-            >
-              <View style={styles.modalHead}>
-                <Text style={styles.modalText}>投稿画像一覧</Text>
-                {/* 上矢印を押すとリストを高さいっぱいまで表示 */}
-                {modalHeight == height * 0.5 ? (
-                  <Pressable
-                    onPress={() => {
-                      setModalHeight(height);
-                    }}
-                  >
-                    <EntypoIcon
-                      name="chevron-small-up"
-                      size={40}
-                      color="#444444"
-                    />
-                  </Pressable>
-                ) : (
-                  <Pressable
-                    onPress={() => {
-                      setModalHeight(height * 0.5);
-                    }}
-                  >
-                    <EntypoIcon
-                      name="chevron-small-down"
-                      size={40}
-                      color="#444444"
-                    />
-                  </Pressable>
-                )}
-              </View>
-
-              <SwipeToDelete />
-            </View>
-          </TouchableWithoutFeedback>
+          ) : (
+            <InputStamp
+              width={width}
+              height={height}
+              setModalMode={setModalMode}
+            />
+          )}
         </View>
       </TouchableWithoutFeedback>
     </Modal>

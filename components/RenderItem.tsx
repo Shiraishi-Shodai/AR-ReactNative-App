@@ -24,14 +24,16 @@ const RenderItem = ({
   height,
 }: RenderItemProps) => {
   return (
+    // アニメーションが可能なビュー
     <Animated.View
       style={[
         styles.rowFrontContainer,
         { width: width * 0.95 },
         {
+          // アニメーションの動きを定義
           height: animatedValue.interpolate({
             inputRange: [0, 1], // animatedValueは0~1の入力を受け取る
-            outputRange: [0, height * 0.1], // 0を入力したとき高さは0, 1のとき高さは70
+            outputRange: [0, height * 0.1], // 0を入力したとき高さは0すなわち見えなくなる, 1のとき高さはheight * 0.1。項目1つ分のデフォルトの高さ
           }),
         },
       ]}
@@ -39,23 +41,23 @@ const RenderItem = ({
       <TouchableHighlight
         style={[styles.rowFront, { height: height * 0.09 }]}
         underlayColor={"#AAA"}
+        onPress={() => console.log("Hello")}
       >
-        <View style={{ backgroundColor: "white", flexDirection: "row" }}>
+        <View style={styles.item}>
           <Image
-            source={{
-              uri: "https://placehold.co/100x100",
-            }}
-            style={{ width: 20, height: 20 }}
+            source={require("../assets/images/a.png")}
+            style={{ width: width * 0.15, height: width * 0.15 }}
             resizeMode={"cover"}
           />
-          <View style={styles.description}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
+          <View style={{ paddingLeft: width * 0.02 }}>
+            <Text>I am {item.text} in a SwipeListView</Text>
+
+            <View style={styles.location}>
+              {/* マップアイコン */}
               <FeatherIcon name="map-pin" size={width * 0.05} />
-              <Text>I am {item.text} in a SwipeListView</Text>
+              {/* 緯度、軽度、高度を表示 */}
+              <Text>35.1122, 137.1039, 50.111</Text>
             </View>
-            <Text>35.1122, 137.1039</Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -71,9 +73,18 @@ const styles = StyleSheet.create({
   },
   rowFront: {
     alignItems: "center",
-    backgroundColor: "gray",
+    backgroundColor: "#EEEEEE",
     borderRadius: 5,
     justifyContent: "center",
   },
+  item: {
+    flexDirection: "row",
+    width: "95%",
+  },
   description: {},
+  location: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "70%",
+  },
 });

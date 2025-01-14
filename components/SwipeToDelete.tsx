@@ -13,6 +13,7 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import RenderItem from "./RenderItem";
 import RenderHiddenItem from "./RenderHiddenItem";
 
+//
 const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
 Array(20)
   .fill("")
@@ -29,6 +30,7 @@ const SwipeToDelete: React.FC = () => {
 
   const { height, width } = useWindowDimensions();
 
+  // アニメーションが実行中か管理する
   const animationIsRunning = useRef(false);
 
   const onSwipeValueChange = (swipeData: {
@@ -39,13 +41,13 @@ const SwipeToDelete: React.FC = () => {
     const { key, value } = swipeData;
     if (
       // スワイプした幅がwindowよりも大きいかつ、アニメーション中のとき
-      value < -Dimensions.get("window").width &&
+      value < -width &&
       !animationIsRunning.current
     ) {
-      animationIsRunning.current = true; // アニメーション中フラグをtrueにして二重実行を防止
+      animationIsRunning.current = true; // アニメーション中フラグをtrueにしてアニメーションの二重実行を防止
       //
       Animated.timing(rowTranslateAnimatedValues[key], {
-        toValue: 0, // アニメーションの最終位置
+        toValue: 0, // アニメーションの最終値
         duration: 200, // アニメーションの時間
         useNativeDriver: false,
       }).start(() => {
@@ -54,7 +56,7 @@ const SwipeToDelete: React.FC = () => {
         const prevIndex = listData.findIndex((item) => item.key === key);
         newData.splice(prevIndex, 1);
         setListData(newData);
-        animationIsRunning.current = false;
+        animationIsRunning.current = false; // アニメーションが終わることを宣言
       });
     }
   };
@@ -65,6 +67,7 @@ const SwipeToDelete: React.FC = () => {
         disableRightSwipe
         data={listData}
         renderItem={({ item }) => (
+          // 前に表示されるビュー
           <RenderItem
             item={item}
             animatedValue={rowTranslateAnimatedValues[item.key]}
@@ -72,7 +75,7 @@ const SwipeToDelete: React.FC = () => {
             height={height}
           />
         )}
-        // ListRenderItemInfo<{ key: string; text: string; }>
+        // 後ろに隠れている削除アイコンが表示されたビュー
         renderHiddenItem={(
           rowData: ListRenderItemInfo<{ key: string; text: string }>,
           rowMap

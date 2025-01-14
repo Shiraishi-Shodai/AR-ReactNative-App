@@ -1,4 +1,4 @@
-export class ARObject {
+export abstract class ARObject {
   protected _id: string;
   protected _user_id: string;
   protected _longitude: number;
@@ -18,4 +18,6 @@ export class ARObject {
     this._latitude = latitude;
     this._altitude = altitude;
   }
+
+  abstract editARObject(object: ARObject): Promise<void>;
 }
