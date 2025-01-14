@@ -27,7 +27,6 @@ const StampModal = () => {
     // 即時実行関数(IIFE)を使用する
     (async () => {
       const result = await stampManager.getARObjects();
-      console.log(result);
       setStampArray([...result]);
     })();
   }, []);

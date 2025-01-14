@@ -2,9 +2,11 @@ import React, { useState, useRef } from "react";
 import {
   Animated,
   Dimensions,
+  ListRenderItemInfo,
   StyleSheet,
   Text,
   TouchableHighlight,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -24,6 +26,8 @@ const SwipeToDelete: React.FC = () => {
       .fill("")
       .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
   );
+
+  const { height, width } = useWindowDimensions();
 
   const animationIsRunning = useRef(false);
 
@@ -64,10 +68,23 @@ const SwipeToDelete: React.FC = () => {
           <RenderItem
             item={item}
             animatedValue={rowTranslateAnimatedValues[item.key]}
+            width={width}
+            height={height}
           />
         )}
-        renderHiddenItem={RenderHiddenItem}
-        rightOpenValue={-Dimensions.get("window").width}
+        // ListRenderItemInfo<{ key: string; text: string; }>
+        renderHiddenItem={(
+          rowData: ListRenderItemInfo<{ key: string; text: string }>,
+          rowMap
+        ) => (
+          <RenderHiddenItem
+            rowData={rowData}
+            rowMap={rowMap}
+            width={width}
+            height={height}
+          />
+        )}
+        rightOpenValue={-width}
         previewRowKey={"0"}
         previewOpenValue={-40}
         previewOpenDelay={3000}
@@ -82,7 +99,7 @@ export default SwipeToDelete;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    alignItems: "center",
     flex: 1,
   },
   backTextWhite: {

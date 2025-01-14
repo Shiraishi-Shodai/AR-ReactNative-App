@@ -6,23 +6,31 @@ import {
   Text,
   TouchableHighlight,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { RowMap } from "react-native-swipe-list-view";
 interface RenderHiddenItemProps {
   rowData: ListRenderItemInfo<{ key: string; text: string }>;
   rowMap: RowMap<{ key: string; text: string }>;
+  width: number;
+  height: number;
 }
 
-const RenderHiddenItem = (
-  rowData: ListRenderItemInfo<{ key: string; text: string }>, // 正しい型を使用
-  rowMap: RowMap<{ key: string; text: string }> // rowMapの型も正しいものを使用
-) => {
-  const { item } = rowData;
+const RenderHiddenItem = ({
+  rowData,
+  rowMap,
+  width,
+  height,
+}: RenderHiddenItemProps) => {
   return (
-    <View style={styles.rowBack}>
+    <View style={[styles.rowBack, { width: width * 0.95 }]}>
       <TouchableHighlight
-        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        style={[
+          styles.backRightBtn,
+          styles.backRightBtnRight,
+          { height: height * 0.09, backgroundColor: "red" },
+        ]}
         onPress={() => console.log("Delete pressed")}
         underlayColor={"#AAA"}
       >
@@ -35,24 +43,12 @@ const RenderHiddenItem = (
 export default RenderHiddenItem;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    flex: 1,
-  },
   backTextWhite: {
     color: "#FFF",
   },
-  rowFront: {
-    alignItems: "center",
-    backgroundColor: "#CCC",
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    justifyContent: "center",
-    height: 50,
-  },
   rowBack: {
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: "white",
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -64,13 +60,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "absolute",
     top: 0,
-    width: 75,
+    width: "100%",
+    borderRadius: 5,
   },
   backRightBtnRight: {
-    backgroundColor: "red",
     right: 0,
-  },
-  rowFrontContainer: {
-    backgroundColor: "white",
   },
 });
