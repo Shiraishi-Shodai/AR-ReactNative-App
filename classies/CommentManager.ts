@@ -3,7 +3,7 @@ import { ARObject } from "./ARObject";
 import database from "@react-native-firebase/database";
 import { Comment } from "./Comment";
 
-class CommentManager implements ARObjectManager {
+export class CommentManager implements ARObjectManager {
   async getARObjects(): Promise<Comment[]> {
     const ref = database().ref("/Comment");
     const stampArray: Comment[] = [];

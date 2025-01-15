@@ -1,6 +1,6 @@
 import { ARObjectModalContext } from "@/components/ARObjectModalProvider";
-import { useARObjectContextDefaultValue } from "@/components/useARObjectContextDefaultValue";
 import { useContext } from "react";
+import { useARObjectContextDefaultValue } from "./useARObjectContextDefaultValue";
 
 // ✅ useContextで受け取る値がnullならデフォルト値を返す
 export const useARObjectModalContext = () => {

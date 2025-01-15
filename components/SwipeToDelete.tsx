@@ -14,6 +14,11 @@ import { Stamp } from "@/classies/Stamp";
 import { User } from "@/classies/User";
 import { AuthContext } from "./AuthProvider";
 import { ARObjectModalContext } from "./ARObjectModalProvider";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectManager } from "@/interfaces/ARObjectManager";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { CommentManager } from "@/classies/CommentManager";
+import { ARObject } from "@/classies/ARObject";
 
 const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
 Array(20)
@@ -23,16 +28,22 @@ Array(20)
   });
 
 const SwipeToDelete: React.FC = () => {
-  const stampManager = new StampManager();
-  const [stampArray, setStampArray] = useState<Stamp[]>([]);
+  // 表示しているモーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
+  console.log(ARObjectModalType);
+  const arObjectManager: ARObjectManager =
+    ARObjectModalType == ARObjectModalEnum.Stamp
+      ? new StampManager()
+      : new CommentManager();
+  const [arObjectArray, setARObjectArray] = useState<ARObject[]>([]);
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
-  // モーダルの種類を取得するコンテキスト
 
   useEffect(() => {
     // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプ一覧データを取得
     (async () => {
-      const result = await stampManager.listMyARObjects(user.id);
-      setStampArray([...result]);
+      const result = await arObjectManager.listMyARObjects(user.id);
+      console.log(result);
+      setARObjectArray([...result]);
     })();
   }, []);
   const [listData, setListData] = useState(
