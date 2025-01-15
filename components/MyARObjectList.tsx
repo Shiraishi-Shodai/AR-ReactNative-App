@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import SwipeToDelete from "./SwipeToDelete";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectManager } from "@/interfaces/ARObjectManager";
+import { StampManager } from "@/classies/StampManager";
+import { CommentManager } from "@/classies/CommentManager";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { User } from "@/classies/User";
+import { AuthContext } from "./AuthProvider";
+import { ARObject } from "@/classies/ARObject";
 
 interface MyStampListProps {
   width: number;
@@ -17,7 +26,33 @@ interface MyStampListProps {
   setModalMode: React.Dispatch<React.SetStateAction<ModalModeEnum>>;
 }
 const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
+  // モーダルを表示する高さ
   const [modalHeight, setModalHeight] = useState<number>(height * 0.5);
+  // あなたの投稿とみんなの投稿のどちらを表示するのか？
+  const [yourPosts, setYourPosts] = useState(true);
+
+  // 表示しているモーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
+  //
+  const arObjectManager: ARObjectManager =
+    ARObjectModalType == ARObjectModalEnum.Stamp
+      ? new StampManager()
+      : new CommentManager();
+  const [arObjectList, setARObjectList] = useState<ARObject[]>([]);
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
+
+  useEffect(() => {
+    // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプまたはコメントの一覧データを取得
+    (async () => {
+      const result = yourPosts
+        ? await arObjectManager.listMyARObjects(user.id)
+        : await arObjectManager.getARObjects();
+      // 何もデータが帰ってこなけらばこの処理は中断する
+      if (!result) return;
+
+      setARObjectList([...result]);
+    })();
+  }, [yourPosts]);
 
   return (
     <>
@@ -42,7 +77,35 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
           style={[{ width: width, height: modalHeight }, styles.modalContent]}
         >
           <View style={styles.modalHead}>
-            <Text style={styles.modalText}>投稿スタンプ一覧</Text>
+            <View style={styles.tabsView}>
+              <Pressable
+                onPress={() => setYourPosts(true)}
+                style={[
+                  styles.tabView,
+                  {
+                    opacity: yourPosts ? 0.3 : 1,
+                    paddingVertical: height * 0.015,
+                    paddingHorizontal: width * 0.01,
+                  },
+                ]}
+              >
+                <Text style={styles.modalText}>あなたの投稿</Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() => setYourPosts(false)}
+                style={[
+                  styles.tabView,
+                  {
+                    opacity: yourPosts ? 1 : 0.3,
+                    paddingVertical: height * 0.015,
+                    paddingHorizontal: width * 0.01,
+                  },
+                ]}
+              >
+                <Text style={styles.modalText}>みんなの投稿</Text>
+              </Pressable>
+            </View>
 
             {/* 投稿一覧ビューの高さを変化させる上または下アイコンの実装*/}
             {modalHeight == height * 0.5 ? (
@@ -71,7 +134,17 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
           </View>
 
           {/* 投稿一覧をリストで表示 */}
-          <SwipeToDelete />
+          {/* リストの要素が0このとき、ローディング画面を表示 */}
+          {arObjectList.length > 0 ? (
+            <SwipeToDelete arObjectList={arObjectList} />
+          ) : (
+            <ActivityIndicator
+              animating={true}
+              color="gray"
+              size="large"
+              style={styles.activityIndicator}
+            />
+          )}
         </View>
       </TouchableWithoutFeedback>
     </>
@@ -90,15 +163,33 @@ const styles = StyleSheet.create({
   modalHead: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: "5%",
     alignItems: "center",
+    borderWidth: 1,
+    marginBottom: 10,
   },
   modalText: {
     textAlign: "center",
-    fontSize: 20,
-    fontWeight: "400",
+    fontSize: 15,
+    fontWeight: "bold",
   },
   swipeListWrapper: {
     justifyContent: "center",
+  },
+  tabsView: {
+    backgroundColor: "#EEEEEE",
+    flexDirection: "row",
+    position: "relative",
+    height: "100%",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  tabView: {
+    borderRightWidth: 1,
+    borderColor: "black",
+  },
+  activityIndicator: {
+    position: "relative",
+    top: "40%",
+    transform: [{ scale: 2 }], // 要素を2倍大きく表示する
   },
 });

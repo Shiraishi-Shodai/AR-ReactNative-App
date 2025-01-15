@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Modal,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
   useWindowDimensions,
@@ -20,6 +21,8 @@ const ARObjectModal = () => {
   const [modalMode, setModalMode] = useState<ModalModeEnum>(
     ModalModeEnum.MyList
   );
+
+  const [index, setIndex] = React.useState(0);
 
   return (
     <Modal

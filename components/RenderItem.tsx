@@ -6,8 +6,11 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
-import RenderItemCommonComponent from "./RenderItemCommonComponent";
 import { ARObject } from "@/classies/ARObject";
+import FeatherIcon from "@expo/vector-icons/Feather";
+import { User } from "@/classies/User";
+import { useContext } from "react";
+import { AuthContext } from "./AuthProvider";
 
 interface RenderItemProps {
   item: ARObject;
@@ -21,6 +24,8 @@ const RenderItem = ({
   width,
   height,
 }: RenderItemProps) => {
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
+
   return (
     // アニメーションが可能なビュー
     <Animated.View
@@ -42,17 +47,46 @@ const RenderItem = ({
         onPress={() => console.log("Hello")}
       >
         <View style={styles.item}>
-          <Image
-            source={require("../assets/images/a.png")}
-            style={{ width: width * 0.15, height: width * 0.15 }}
-            resizeMode={"cover"}
-          />
+          {user.photoURL ? (
+            <Image
+              source={{ uri: user.photoURL }}
+              style={{ width: width * 0.15, height: width * 0.15 }}
+              resizeMode={"cover"}
+            />
+          ) : (
+            <Image
+              source={require("../assets/images/a.png")}
+              style={{ width: width * 0.15, height: width * 0.15 }}
+              resizeMode={"cover"}
+            />
+          )}
 
-          <RenderItemCommonComponent
-            width={width}
-            height={height}
-            item={item}
-          />
+          <View style={{ paddingLeft: width * 0.02 }}>
+            <View style={{ width: width * 0.6 }}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: "bold",
+                }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                I am {item.id} in a SwipeListView
+              </Text>
+            </View>
+
+            <View style={styles.location}>
+              {/* マップアイコン */}
+              <FeatherIcon name="map-pin" size={width * 0.05} />
+              {/* 緯度、軽度、高度を表示 */}
+              <View>
+                <Text>35.1122, 137.1039, 50.111</Text>
+              </View>
+            </View>
+            <View style={styles.postTime}>
+              <Text>2025/01/15</Text>
+            </View>
+          </View>
         </View>
       </TouchableHighlight>
     </Animated.View>
@@ -74,5 +108,15 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
     width: "95%",
+  },
+  location: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    width: "80%",
+  },
+  postTime: {
+    position: "absolute",
+    top: "70%",
+    left: "90%",
   },
 });
