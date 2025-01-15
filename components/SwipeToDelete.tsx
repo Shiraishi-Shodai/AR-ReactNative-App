@@ -13,6 +13,7 @@ import { StampManager } from "@/classies/StampManager";
 import { Stamp } from "@/classies/Stamp";
 import { User } from "@/classies/User";
 import { AuthContext } from "./AuthProvider";
+import { ARObjectModalContext } from "./ARObjectModalProvider";
 
 const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
 Array(20)
@@ -25,6 +26,7 @@ const SwipeToDelete: React.FC = () => {
   const stampManager = new StampManager();
   const [stampArray, setStampArray] = useState<Stamp[]>([]);
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
+  // モーダルの種類を取得するコンテキスト
 
   useEffect(() => {
     // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプ一覧データを取得
