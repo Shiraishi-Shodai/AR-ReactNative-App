@@ -16,7 +16,7 @@ interface MyStampListProps {
   height: number;
   setModalMode: React.Dispatch<React.SetStateAction<ModalModeEnum>>;
 }
-const MyStampList = ({ width, height, setModalMode }: MyStampListProps) => {
+const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
   const [modalHeight, setModalHeight] = useState<number>(height * 0.5);
 
   return (
@@ -78,7 +78,7 @@ const MyStampList = ({ width, height, setModalMode }: MyStampListProps) => {
   );
 };
 
-export default MyStampList;
+export default MyARObjectList;
 
 const styles = StyleSheet.create({
   plusView: {

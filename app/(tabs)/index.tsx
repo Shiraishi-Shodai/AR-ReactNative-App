@@ -1,15 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
 import HomeScene from "@/components/HomeScene";
-import { AuthContext } from "@/components/AuthProvider";
 import {
   Gesture,
   GestureDetector,
@@ -19,11 +11,12 @@ import {
 import ControllerModal from "@/components/ControllerModal";
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
 import TextInputModal from "@/components/TextInputModal";
-import StampModal from "@/components/StampModal";
+import StampModal from "@/components/ARObjectModal";
 import UserIcon from "@/components/UserIcon";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { runOnJS } from "react-native-reanimated";
 import Setting from "@/components/Setting";
+import ARObjectModal from "@/components/ARObjectModal";
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -169,11 +162,11 @@ const HomeScreen = () => {
         />
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
           // スタンプ追加モーダルを表示
-          <StampModal />
+          <ARObjectModal />
         )}
         {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Lower && (
           // テキスト追加モーダルを表示
-          <TextInputModal />
+          <ARObjectModal />
         )}
       </View>
     </LongPressGestureHandler>

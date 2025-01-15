@@ -6,11 +6,11 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import MyStampList from "./MyStampList";
+import MyARObjectList from "./MyARObjectList";
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
 import InputStamp from "./InputStamp";
 
-const StampModal = () => {
+const ARObjectModal = () => {
   // Modalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(true);
   // デバイスの画面の幅と高さを取得
@@ -32,7 +32,7 @@ const StampModal = () => {
         <View style={[styles.overlay]}>
           {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
           {modalMode == ModalModeEnum.MyList ? (
-            <MyStampList
+            <MyARObjectList
               width={width}
               height={height}
               setModalMode={setModalMode}
@@ -50,7 +50,7 @@ const StampModal = () => {
   );
 };
 
-export default StampModal;
+export default ARObjectModal;
 
 const styles = StyleSheet.create({
   overlay: {
