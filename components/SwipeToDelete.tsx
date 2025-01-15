@@ -1,19 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   Animated,
-  Dimensions,
   ListRenderItemInfo,
   StyleSheet,
-  Text,
-  TouchableHighlight,
   useWindowDimensions,
   View,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import RenderItem from "./RenderItem";
 import RenderHiddenItem from "./RenderHiddenItem";
+import { StampManager } from "@/classies/StampManager";
+import { Stamp } from "@/classies/Stamp";
+import { User } from "@/classies/User";
+import { AuthContext } from "./AuthProvider";
 
-//
 const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
 Array(20)
   .fill("")
@@ -22,6 +22,17 @@ Array(20)
   });
 
 const SwipeToDelete: React.FC = () => {
+  const stampManager = new StampManager();
+  const [stampArray, setStampArray] = useState<Stamp[]>([]);
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
+
+  useEffect(() => {
+    // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプ一覧データを取得
+    (async () => {
+      const result = await stampManager.listMyARObjects(user.id);
+      setStampArray([...result]);
+    })();
+  }, []);
   const [listData, setListData] = useState(
     Array(20)
       .fill("")

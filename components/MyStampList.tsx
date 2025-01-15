@@ -1,6 +1,4 @@
-import { Stamp } from "@/classies/Stamp";
-import { StampManager } from "@/classies/StampManager";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,8 +10,6 @@ import SwipeToDelete from "./SwipeToDelete";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
-import { User } from "@/classies/User";
-import { AuthContext } from "./AuthProvider";
 
 interface MyStampListProps {
   width: number;
@@ -21,18 +17,7 @@ interface MyStampListProps {
   setModalMode: React.Dispatch<React.SetStateAction<ModalModeEnum>>;
 }
 const MyStampList = ({ width, height, setModalMode }: MyStampListProps) => {
-  const stampManager = new StampManager();
-  const [stampArray, setStampArray] = useState<Stamp[]>([]);
   const [modalHeight, setModalHeight] = useState<number>(height * 0.5);
-  const { user }: { user: User } = useContext(AuthContext) as { user: User };
-
-  useEffect(() => {
-    // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプ一覧データを取得
-    (async () => {
-      const result = await stampManager.listMyARObjects(user.id);
-      setStampArray([...result]);
-    })();
-  }, []);
 
   return (
     <>
