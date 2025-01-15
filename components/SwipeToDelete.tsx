@@ -10,10 +10,8 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import RenderItem from "./RenderItem";
 import RenderHiddenItem from "./RenderHiddenItem";
 import { StampManager } from "@/classies/StampManager";
-import { Stamp } from "@/classies/Stamp";
 import { User } from "@/classies/User";
 import { AuthContext } from "./AuthProvider";
-import { ARObjectModalContext } from "./ARObjectModalProvider";
 import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
 import { ARObjectManager } from "@/interfaces/ARObjectManager";
 import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
@@ -46,6 +44,7 @@ const SwipeToDelete: React.FC = () => {
       setARObjectArray([...result]);
     })();
   }, []);
+
   const [listData, setListData] = useState(
     Array(20)
       .fill("")

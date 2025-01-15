@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
-import FeatherIcon from "@expo/vector-icons/Feather";
+import RenderItemCommonComponent from "./RenderItemCommonComponent";
 
 interface RenderItemProps {
   item: {
@@ -49,16 +49,12 @@ const RenderItem = ({
             style={{ width: width * 0.15, height: width * 0.15 }}
             resizeMode={"cover"}
           />
-          <View style={{ paddingLeft: width * 0.02 }}>
-            <Text>I am {item.text} in a SwipeListView</Text>
 
-            <View style={styles.location}>
-              {/* マップアイコン */}
-              <FeatherIcon name="map-pin" size={width * 0.05} />
-              {/* 緯度、軽度、高度を表示 */}
-              <Text>35.1122, 137.1039, 50.111</Text>
-            </View>
-          </View>
+          <RenderItemCommonComponent
+            width={width}
+            height={height}
+            item={item}
+          />
         </View>
       </TouchableHighlight>
     </Animated.View>
@@ -80,11 +76,5 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
     width: "95%",
-  },
-  description: {},
-  location: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "70%",
   },
 });
