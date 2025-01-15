@@ -42,7 +42,7 @@ const MyStampList = ({ width, height, setModalMode }: MyStampListProps) => {
       >
         {/* plusのアイコンを2つ重ねている。こうすることで、十字の部分とその周りの色を指定できるようになる */}
         {/* 十字の周りを表示するアイコン*/}
-        <AntIcon name="pluscircle" color="#2C7CFF" size={width * 0.15} />{" "}
+        <AntIcon name="pluscircle" color="#2C7CFF" size={width * 0.15} />
         {/* 十字を表示するアイコン*/}
         <AntIcon
           name="plus"
@@ -66,7 +66,7 @@ const MyStampList = ({ width, height, setModalMode }: MyStampListProps) => {
                   setModalHeight(height); // 上矢印を押すとリストを高さいっぱいまで投稿一覧ビューを表示
                 }}
               >
-                {/* 上矢印アイコン */}
+                {/* // 上矢印アイコン  */}
                 <EntypoIcon name="chevron-small-up" size={40} color="#444444" />
               </Pressable>
             ) : (
