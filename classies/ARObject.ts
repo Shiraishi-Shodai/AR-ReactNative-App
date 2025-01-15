@@ -4,19 +4,22 @@ export abstract class ARObject {
   protected _longitude: number;
   protected _latitude: number;
   protected _altitude: number;
+  protected _post_time: number;
 
   constructor(
     id: string,
     user_id: string,
     longitude: number,
     latitude: number,
-    altitude: number
+    altitude: number,
+    post_time: number
   ) {
     this._id = id;
     this._user_id = user_id;
     this._longitude = longitude;
     this._latitude = latitude;
     this._altitude = altitude;
+    this._post_time = post_time;
   }
 
   public get id(): string {
@@ -48,6 +51,12 @@ export abstract class ARObject {
   }
   public set altitude(value: number) {
     this._altitude = value;
+  }
+  public get post_time(): number {
+    return this._post_time;
+  }
+  public set post_time(value: number) {
+    this._post_time = value;
   }
 
   abstract editARObject(object: ARObject): Promise<void>;

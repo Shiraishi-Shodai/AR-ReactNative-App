@@ -22,8 +22,6 @@ const ARObjectModal = () => {
     ModalModeEnum.MyList
   );
 
-  const [index, setIndex] = React.useState(0);
-
   return (
     <Modal
       transparent={true}

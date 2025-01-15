@@ -11,6 +11,10 @@ import FeatherIcon from "@expo/vector-icons/Feather";
 import { User } from "@/classies/User";
 import { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { Stamp } from "@/classies/Stamp";
+import { Comment } from "@/classies/Comment";
 
 interface RenderItemProps {
   item: ARObject;
@@ -25,6 +29,7 @@ const RenderItem = ({
   height,
 }: RenderItemProps) => {
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
+  const { ARObjectModalType } = useARObjectModalContext();
 
   return (
     // アニメーションが可能なビュー
@@ -71,7 +76,9 @@ const RenderItem = ({
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                I am {item.id} in a SwipeListView
+                {ARObjectModalType == ARObjectModalEnum.Stamp
+                  ? (item as Stamp).name
+                  : (item as Comment).text}
               </Text>
             </View>
 
@@ -80,11 +87,13 @@ const RenderItem = ({
               <FeatherIcon name="map-pin" size={width * 0.05} />
               {/* 緯度、軽度、高度を表示 */}
               <View>
-                <Text>35.1122, 137.1039, 50.111</Text>
+                <Text>
+                  {item.latitude}, {item.longitude}, {item.altitude}
+                </Text>
               </View>
             </View>
             <View style={styles.postTime}>
-              <Text>2025/01/15</Text>
+              <Text>{item.post_time}</Text>
             </View>
           </View>
         </View>
