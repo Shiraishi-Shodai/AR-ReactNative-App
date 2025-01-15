@@ -1,3 +1,4 @@
+import { ARObject } from "@/classies/ARObject";
 import { Stamp } from "@/classies/Stamp";
 import React, { useContext } from "react";
 import {
@@ -11,8 +12,8 @@ import {
 } from "react-native";
 import { RowMap } from "react-native-swipe-list-view";
 interface RenderHiddenItemProps {
-  rowData: ListRenderItemInfo<{ key: string; text: string }>;
-  rowMap: RowMap<{ key: string; text: string }>;
+  rowData: ListRenderItemInfo<ARObject>;
+  rowMap: RowMap<ARObject>;
   width: number;
   height: number;
 }

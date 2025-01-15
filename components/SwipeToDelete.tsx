@@ -1,8 +1,15 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  MutableRefObject,
+} from "react";
 import {
   Animated,
   ListRenderItemInfo,
   StyleSheet,
+  Text,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -18,38 +25,36 @@ import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
 import { CommentManager } from "@/classies/CommentManager";
 import { ARObject } from "@/classies/ARObject";
 
-const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
-Array(20)
-  .fill("")
-  .forEach((_, i) => {
-    rowTranslateAnimatedValues[`${i}`] = new Animated.Value(1);
-  });
-
 const SwipeToDelete: React.FC = () => {
+  // アニメーションを制御するref
+  const ref: MutableRefObject<{
+    [id: string]: Animated.Value;
+  }> = useRef({});
+
   // 表示しているモーダルの種類を取得するコンテキスト
   const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
-  console.log(ARObjectModalType);
+  //
   const arObjectManager: ARObjectManager =
     ARObjectModalType == ARObjectModalEnum.Stamp
       ? new StampManager()
       : new CommentManager();
-  const [arObjectArray, setARObjectArray] = useState<ARObject[]>([]);
+  const [arObjectLlst, setARObjectList] = useState<ARObject[]>([]);
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
 
   useEffect(() => {
     // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプ一覧データを取得
     (async () => {
       const result = await arObjectManager.listMyARObjects(user.id);
-      console.log(result);
-      setARObjectArray([...result]);
+      // 何もデータが帰ってこなけらばこの処理は中断する
+      if (!result) return;
+
+      for (let item of result) {
+        ref.current[`${item.id}`] = new Animated.Value(1);
+      }
+
+      setARObjectList([...result]);
     })();
   }, []);
-
-  const [listData, setListData] = useState(
-    Array(20)
-      .fill("")
-      .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
-  );
 
   const { height, width } = useWindowDimensions();
 
@@ -68,17 +73,16 @@ const SwipeToDelete: React.FC = () => {
       !animationIsRunning.current
     ) {
       animationIsRunning.current = true; // アニメーション中フラグをtrueにしてアニメーションの二重実行を防止
-      //
-      Animated.timing(rowTranslateAnimatedValues[key], {
+      Animated.timing(ref.current[key], {
         toValue: 0, // アニメーションの最終値
         duration: 200, // アニメーションの時間
         useNativeDriver: false,
       }).start(() => {
         // アニメーション終了後の処理(アイテムの削除処理)
-        const newData = [...listData];
-        const prevIndex = listData.findIndex((item) => item.key === key);
+        const newData = [...arObjectLlst];
+        const prevIndex = arObjectLlst.findIndex((item) => item.id === key);
         newData.splice(prevIndex, 1);
-        setListData(newData);
+        setARObjectList(newData);
         animationIsRunning.current = false; // アニメーションが終わることを宣言
       });
     }
@@ -86,37 +90,40 @@ const SwipeToDelete: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <SwipeListView
-        disableRightSwipe
-        data={listData}
-        renderItem={({ item }) => (
-          // 前に表示されるビュー
-          <RenderItem
-            item={item}
-            animatedValue={rowTranslateAnimatedValues[item.key]}
-            width={width}
-            height={height}
-          />
-        )}
-        // 後ろに隠れている削除アイコンが表示されたビュー
-        renderHiddenItem={(
-          rowData: ListRenderItemInfo<{ key: string; text: string }>,
-          rowMap
-        ) => (
-          <RenderHiddenItem
-            rowData={rowData}
-            rowMap={rowMap}
-            width={width}
-            height={height}
-          />
-        )}
-        rightOpenValue={-width}
-        previewRowKey={"0"}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-        onSwipeValueChange={onSwipeValueChange} // 行のtranslateX値が変更されたときに呼び出されるコールバック。
-        useNativeDriver={false}
-      />
+      {ref.current ? (
+        <SwipeListView
+          disableRightSwipe
+          data={arObjectLlst}
+          keyExtractor={(item) => item.id.toString()} // arObjectLlstの各オブジェクトはkeyプロパティを含まないため明示的にidをkeyとして扱う
+          renderItem={({ item }) => (
+            <RenderItem
+              item={item}
+              animatedValue={ref.current[item.id]}
+              width={width}
+              height={height}
+            />
+          )}
+          // 後ろに隠れている削除アイコンが表示されたビュー
+          renderHiddenItem={(rowData: ListRenderItemInfo<ARObject>, rowMap) => (
+            <RenderHiddenItem
+              rowData={rowData}
+              rowMap={rowMap}
+              width={width}
+              height={height}
+            />
+          )}
+          rightOpenValue={-width}
+          previewRowKey={"0"}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+          onSwipeValueChange={onSwipeValueChange} // 行のtranslateX値が変更されたときに呼び出されるコールバック。
+          useNativeDriver={false}
+        />
+      ) : (
+        <View style={{ justifyContent: "center" }}>
+          <Text>now loading</Text>
+        </View>
+      )}
     </View>
   );
 };

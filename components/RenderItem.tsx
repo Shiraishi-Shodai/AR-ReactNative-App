@@ -7,12 +7,10 @@ import {
   View,
 } from "react-native";
 import RenderItemCommonComponent from "./RenderItemCommonComponent";
+import { ARObject } from "@/classies/ARObject";
 
 interface RenderItemProps {
-  item: {
-    key: string;
-    text: string;
-  };
+  item: ARObject;
   animatedValue: Animated.Value;
   width: number;
   height: number;

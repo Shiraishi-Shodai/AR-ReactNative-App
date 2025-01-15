@@ -1,12 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FeatherIcon from "@expo/vector-icons/Feather";
+import { ARObject } from "@/classies/ARObject";
 
 interface RenderItemCommonProps {
-  item: {
-    key: string;
-    text: string;
-  };
+  item: ARObject;
   width: number;
   height: number;
 }
@@ -19,7 +17,7 @@ const RenderItemCommonComponent = ({
   return (
     <View style={{ paddingLeft: width * 0.02 }}>
       <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-        I am {item.text} in a SwipeListView
+        I am {item.id} in a SwipeListView
       </Text>
 
       <View style={styles.location}>
