@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -20,12 +20,16 @@ import { User } from "@/classies/User";
 import { AuthContext } from "./AuthProvider";
 import { ARObject } from "@/classies/ARObject";
 
-interface MyStampListProps {
+interface ViewARObjectListProps {
   width: number;
   height: number;
   setModalMode: React.Dispatch<React.SetStateAction<ModalModeEnum>>;
 }
-const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
+const MyARObjectList = ({
+  width,
+  height,
+  setModalMode,
+}: ViewARObjectListProps) => {
   // モーダルを表示する高さ
   const [modalHeight, setModalHeight] = useState<number>(height * 0.5);
   // あなたの投稿とみんなの投稿のどちらを表示するのか？
@@ -33,13 +37,16 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
 
   // 表示しているモーダルの種類を取得するコンテキスト
   const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
-  //
+  //データを取得する際に使用するマネージャーをコンテキストのARObjectModalTypeによってどの型を使用するか選択する
   const arObjectManager: ARObjectManager =
     ARObjectModalType == ARObjectModalEnum.Stamp
       ? new StampManager()
       : new CommentManager();
+  // 取得したデータを配列で保持
   const [arObjectList, setARObjectList] = useState<ARObject[]>([]);
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
+  // ローディングアイコンを表示するかどうかのref
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプまたはコメントの一覧データを取得
@@ -51,6 +58,7 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
       if (!result) return;
 
       setARObjectList([...result]);
+      setIsLoading(false);
     })();
   }, [yourPosts]);
 
@@ -79,7 +87,12 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
           <View style={styles.modalHead}>
             <View style={styles.tabsView}>
               <Pressable
-                onPress={() => setYourPosts(true)}
+                onPress={() => {
+                  setYourPosts(true);
+                  // ローディングのActivityIndicatorコンポーネントを表示するためにARObjectListとisLoadingをリセット
+                  setARObjectList([]);
+                  setIsLoading(true);
+                }}
                 style={[
                   styles.tabView,
                   {
@@ -93,7 +106,12 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
               </Pressable>
 
               <Pressable
-                onPress={() => setYourPosts(false)}
+                onPress={() => {
+                  // ローディングのActivityIndicatorコンポーネントを表示するためにARObjectListとisLoadingをリセット
+                  setYourPosts(false);
+                  setARObjectList([]);
+                  setIsLoading(true);
+                }}
                 style={[
                   styles.tabView,
                   {
@@ -137,13 +155,15 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
           {/* リストの要素が0このとき、ローディング画面を表示 */}
           {arObjectList.length > 0 ? (
             <SwipeToDelete arObjectList={arObjectList} />
-          ) : (
+          ) : isLoading ? (
             <ActivityIndicator
               animating={true}
               color="gray"
               size="large"
               style={styles.activityIndicator}
             />
+          ) : (
+            <Text>No Data</Text>
           )}
         </View>
       </TouchableWithoutFeedback>

@@ -7,7 +7,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import MyARObjectList from "./MyARObjectList";
+import ViewARObjcetList from "./ViewARObjectList";
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
 import InputStamp from "./InputStamp";
 import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
@@ -39,7 +39,7 @@ const ARObjectModal = () => {
         <View style={styles.overlay}>
           {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
           {modalMode == ModalModeEnum.ARObjectList ? (
-            <MyARObjectList
+            <ViewARObjcetList
               width={width}
               height={height}
               setModalMode={setModalMode}
