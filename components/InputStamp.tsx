@@ -47,7 +47,7 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
         >
           <Pressable
             style={styles.modalHead}
-            onPress={() => setModalMode(ModalModeEnum.MyList)}
+            onPress={() => setModalMode(ModalModeEnum.ARObjectList)}
           >
             <EntypoIcon
               name="chevron-thin-left"
