@@ -28,8 +28,12 @@ import { AuthContext } from "./AuthProvider";
 
 interface SwipeToDeleteProps {
   arObjectList: ARObject[];
+  disableLeftSwipe: boolean;
 }
-const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ arObjectList }) => {
+const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({
+  arObjectList,
+  disableLeftSwipe,
+}) => {
   // アニメーションを制御するref
   const ref: MutableRefObject<{
     [id: string]: Animated.Value;
@@ -81,6 +85,7 @@ const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ arObjectList }) => {
       {/* データベースから取得したデータをarObjectListに代入出来たらビューを表示そうでないならローディングを表示 */}
       <SwipeListView
         disableRightSwipe
+        disableLeftSwipe={disableLeftSwipe}
         data={arObjectList}
         keyExtractor={(item) => item.id.toString()} // arObjectLlstの各オブジェクトはkeyプロパティを含まないため明示的にidをkeyとして扱う
         renderItem={({ item }) => (

@@ -151,18 +151,16 @@ const MyARObjectList = ({
             )}
           </View>
 
-          {/* 投稿一覧をリストで表示 */}
-          {/* リストの要素が0このとき、ローディング画面を表示 */}
-          {arObjectList.length > 0 ? (
-            <SwipeToDelete arObjectList={arObjectList} />
-          ) : isLoading ? (
+          {isLoading ? (
+            // ローディング中のとき、ローディングコンポーネントを表示
             <ActivityIndicator
               animating={true}
               color="gray"
               size="large"
               style={styles.activityIndicator}
             />
-          ) : (
+          ) : arObjectList.length == 0 ? (
+            // 取得したデータが0このときの表示
             <View
               style={{
                 flex: 1,
@@ -170,8 +168,22 @@ const MyARObjectList = ({
                 justifyContent: "center",
               }}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>No Data</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Post data not found
+              </Text>
             </View>
+          ) : yourPosts ? (
+            // ログイン中のユーザーが投稿したデータ一覧を表示
+            <SwipeToDelete
+              arObjectList={arObjectList}
+              disableLeftSwipe={false}
+            />
+          ) : (
+            // 全ユーザーが投稿したデータ一覧を表示
+            <SwipeToDelete
+              arObjectList={arObjectList}
+              disableLeftSwipe={true} // 他のユーザーのオブジェクトを削除してしまわないようにスワイプが出来ないようにする
+            />
           )}
         </View>
       </TouchableWithoutFeedback>
