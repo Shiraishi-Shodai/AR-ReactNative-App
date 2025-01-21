@@ -45,7 +45,7 @@ export class StampManager implements ARObjectManager {
     }
   }
   async inputARObjects(object: ARObject): Promise<void> {}
-  async deleteARObjects(object: ARObject): Promise<void> {}
+  async deleteARObjects(object_id: string, user_id: string): Promise<void> {}
   async listMyARObjects(user: User): Promise<Stamp[]> {
     const ref = database().ref("/Stamp");
     const stampArray: Stamp[] = [];

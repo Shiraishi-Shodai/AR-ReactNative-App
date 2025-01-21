@@ -77,10 +77,10 @@ export class CommentManager implements ARObjectManager {
     }
   }
   async inputARObjects(object: Comment): Promise<void> {
-    const userRef: string = `users/${object.user_id}/comments/${object.id}`;
+    const usersRef: string = `users/${object.user_id}/comments/${object.id}`;
     const commentsRef: string = `comments/${object.id}`;
     const updateObject = {
-      [userRef]: true,
+      [usersRef]: true,
       [commentsRef]: {
         user_id: object.user_id,
         latitude: object.latitude,
@@ -99,7 +99,21 @@ export class CommentManager implements ARObjectManager {
       console.log("コメント追加時にエラー発生");
     }
   }
-  async deleteARObjects(object: ARObject): Promise<void> {}
+  async deleteARObjects(object_id: string, user_id: string): Promise<void> {
+    const usersRef = `users/${user_id}/comments/${object_id}`;
+    const commentsRef = `comments/${object_id}`;
+    const updateObject = {
+      [usersRef]: null,
+      [commentsRef]: null,
+    };
+
+    try {
+      await database().ref("/").update(updateObject);
+      console.log("コメント削除完了");
+    } catch (e) {
+      console.log("コメント削除エラー");
+    }
+  }
   async listMyARObjects(user: User): Promise<Comment[]> {
     const commentArray: Comment[] = [];
     try {

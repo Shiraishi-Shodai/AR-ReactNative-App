@@ -163,7 +163,15 @@ const MyARObjectList = ({
               style={styles.activityIndicator}
             />
           ) : (
-            <Text>No Data</Text>
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>No Data</Text>
+            </View>
           )}
         </View>
       </TouchableWithoutFeedback>

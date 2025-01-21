@@ -18,6 +18,13 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import RenderItem from "./RenderItem";
 import RenderHiddenItem from "./RenderHiddenItem";
 import { ARObject } from "@/classies/ARObject";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectManager } from "@/interfaces/ARObjectManager";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { StampManager } from "@/classies/StampManager";
+import { CommentManager } from "@/classies/CommentManager";
+import { User } from "@/classies/User";
+import { AuthContext } from "./AuthProvider";
 
 interface SwipeToDeleteProps {
   arObjectList: ARObject[];
@@ -27,16 +34,25 @@ const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ arObjectList }) => {
   const ref: MutableRefObject<{
     [id: string]: Animated.Value;
   }> = useRef({});
-
+  // デフォルトで全てのキーのアニメーションの値を1に設定
   for (let item of arObjectList) {
     ref.current[`${item.id}`] = new Animated.Value(1);
   }
-
   const { height, width } = useWindowDimensions();
-
   // アニメーションが実行中か管理する
   const animationIsRunning = useRef(false);
 
+  // 表示しているモーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
+  //データを取得する際に使用するマネージャーをコンテキストのARObjectModalTypeによってどの型を使用するか選択する
+  const arObjectManager: ARObjectManager =
+    ARObjectModalType == ARObjectModalEnum.Stamp
+      ? new StampManager()
+      : new CommentManager();
+
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
+
+  // アイテムをスワイプ中に実行する関数
   const onSwipeValueChange = (swipeData: {
     key: string; // アイテムのキー
     value: number; // スワイプの距離
@@ -54,11 +70,7 @@ const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ arObjectList }) => {
         duration: 200, // アニメーションの時間
         useNativeDriver: false,
       }).start(() => {
-        // アニメーション終了後の処理(アイテムの削除処理)
-        // const newData = [...arObjectLlst];
-        // const prevIndex = arObjectLlst.findIndex((item) => item.id === key);
-        // newData.splice(prevIndex, 1);
-        // setARObjectList(newData);
+        arObjectManager.deleteARObjects(key, user.id);
         animationIsRunning.current = false; // アニメーションが終わることを宣言
       });
     }

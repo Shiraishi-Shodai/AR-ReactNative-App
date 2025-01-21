@@ -7,7 +7,7 @@ export interface ARObjectManager {
   // コメントまたはスタンプを投稿
   inputARObjects(object: ARObject): Promise<void>;
   // コメントまたはスタンプを削除
-  deleteARObjects(object: ARObject): Promise<void>;
+  deleteARObjects(object_id: string, user_id: string): Promise<void>;
   // ログイン中のユーザーが投稿したコメントまたはスタンプのデータを取得
   listMyARObjects(user: User): Promise<ARObject[]>;
   // user/user_id/comments or user/user_id/stampsを取得する
