@@ -1,5 +1,5 @@
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -15,15 +15,44 @@ import UserIcon from "./UserIcon";
 import { User } from "@/classies/User";
 import { AuthContext } from "./AuthProvider";
 import EntypoIcon from "react-native-vector-icons/Entypo";
+import { Comment } from "@/classies/Comment";
+import uuid from "react-native-uuid";
+import { CommentManager } from "@/classies/CommentManager";
 
 interface InputCommentProps {
   width: number;
   height: number;
   setModalMode: React.Dispatch<React.SetStateAction<ModalModeEnum>>;
 }
-const InputText = ({ width, height, setModalMode }: InputCommentProps) => {
+const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
+  const textRef = useRef<string>("");
 
+  // コメントオブジェクトを作成し、CommentManagerに挿入処理を委託する
+  const handleInputComment = async () => {
+    const id: string = uuid.v4();
+    const post_time = new Date().toISOString().slice(0, 19);
+    const latitude = 100;
+    const longitude = 100;
+    const altitude = 100;
+    const comment: Comment = new Comment(
+      id,
+      user.id,
+      latitude,
+      longitude,
+      altitude,
+      post_time,
+      textRef.current
+    );
+    const commentManager: CommentManager = new CommentManager();
+    try {
+      await commentManager.inputARObjects(comment);
+    } catch (e) {
+      console.log("コメント追加エラー発生");
+    } finally {
+      setModalMode(ModalModeEnum.ARObjectList);
+    }
+  };
   return (
     <TouchableWithoutFeedback>
       <KeyboardAvoidingView behavior="padding">
@@ -69,7 +98,14 @@ const InputText = ({ width, height, setModalMode }: InputCommentProps) => {
                   </View>
                 </View>
                 <View style={styles.inputViewItem}>
-                  <TextInput placeholder="hei" multiline={true} />
+                  <TextInput
+                    placeholder="hei"
+                    multiline={true}
+                    onChangeText={(text: string) => {
+                      textRef.current = text;
+                      console.log(textRef.current);
+                    }}
+                  />
                 </View>
                 <View style={styles.post_timeView}>
                   <Text>YYYY/MM/DD</Text>
@@ -78,6 +114,7 @@ const InputText = ({ width, height, setModalMode }: InputCommentProps) => {
             </View>
           </View>
           <Pressable
+            onPress={handleInputComment}
             style={[styles.buttonView, { borderRadius: width * 0.02 }]}
           >
             <Text style={styles.buttonText}>AR上にコメントを追加</Text>
@@ -88,7 +125,7 @@ const InputText = ({ width, height, setModalMode }: InputCommentProps) => {
   );
 };
 
-export default InputText;
+export default InputComment;
 
 const styles = StyleSheet.create({
   modalHead: {

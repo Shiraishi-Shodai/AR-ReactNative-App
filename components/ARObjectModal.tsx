@@ -12,7 +12,7 @@ import { ModalModeEnum } from "@/constants/ModalModeEnum";
 import InputStamp from "./InputStamp";
 import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
 import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
-import InputText from "./InputText";
+import InputComment from "./InputComment";
 
 const ARObjectModal = () => {
   // Modalの表示非表示をコントロールするステート
@@ -36,34 +36,30 @@ const ARObjectModal = () => {
     >
       {/* 背景をタップするとモーダルを閉じる */}
       <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-        {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
-        {modalMode == ModalModeEnum.ARObjectList ? (
-          <View style={[styles.overlay, { justifyContent: "flex-end" }]}>
+        <View style={styles.overlay}>
+          {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
+          {modalMode == ModalModeEnum.ARObjectList ? (
             <MyARObjectList
               width={width}
               height={height}
               setModalMode={setModalMode}
             />
-          </View>
-        ) : // コンテキストがスタンプならスタンプ追加画面を
-        ARObjectModalType == ARObjectModalEnum.Stamp ? (
-          <View style={[styles.overlay, { justifyContent: "flex-end" }]}>
+          ) : // コンテキストがスタンプならスタンプ追加画面を
+          ARObjectModalType == ARObjectModalEnum.Stamp ? (
             <InputStamp
               width={width}
               height={height}
               setModalMode={setModalMode}
             />
-          </View>
-        ) : (
-          // それ以外の場合はコンテキストがコメントなのでコメント追加画面を
-          <View style={[styles.overlay, { justifyContent: "flex-end" }]}>
-            <InputText
+          ) : (
+            // それ以外の場合はコンテキストがコメントなのでコメント追加画面を
+            <InputComment
               width={width}
               height={height}
               setModalMode={setModalMode}
             />
-          </View>
-        )}
+          )}
+        </View>
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -76,6 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   plusView: {
     position: "absolute",

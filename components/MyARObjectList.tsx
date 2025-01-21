@@ -45,7 +45,7 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
     // 即時実行関数(IIFE)を使用し、自分が投稿したスタンプまたはコメントの一覧データを取得
     (async () => {
       const result = yourPosts
-        ? await arObjectManager.listMyARObjects(user.id)
+        ? await arObjectManager.listMyARObjects(user)
         : await arObjectManager.listAllARObjects();
       // 何もデータが帰ってこなけらばこの処理は中断する
       if (!result) return;

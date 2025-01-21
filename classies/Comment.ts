@@ -17,9 +17,20 @@ export class Comment extends ARObject {
     longitude: number,
     altitude: number,
     post_time: string,
-    text: string
+    text: string,
+    user_displayName?: string,
+    user_photoURL?: string
   ) {
-    super(id, user_id, latitude, longitude, altitude, post_time);
+    super(
+      id,
+      user_id,
+      latitude,
+      longitude,
+      altitude,
+      post_time,
+      user_displayName,
+      user_photoURL
+    );
     this._text = text;
   }
 

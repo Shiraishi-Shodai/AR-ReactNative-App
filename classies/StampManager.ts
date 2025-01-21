@@ -2,6 +2,7 @@ import { ARObjectManager } from "@/interfaces/ARObjectManager";
 import { ARObject } from "./ARObject";
 import database from "@react-native-firebase/database";
 import { Stamp } from "./Stamp";
+import { User } from "./User";
 
 export class StampManager implements ARObjectManager {
   async listAllARObjects(): Promise<Stamp[]> {
@@ -45,7 +46,7 @@ export class StampManager implements ARObjectManager {
   }
   async inputARObjects(object: ARObject): Promise<void> {}
   async deleteARObjects(object: ARObject): Promise<void> {}
-  async listMyARObjects(user_id: string): Promise<Stamp[]> {
+  async listMyARObjects(user: User): Promise<Stamp[]> {
     const ref = database().ref("/Stamp");
     const stampArray: Stamp[] = [];
     try {

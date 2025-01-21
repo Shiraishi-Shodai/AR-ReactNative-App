@@ -53,9 +53,9 @@ const RenderItem = ({
         onPress={() => console.log("Hello")}
       >
         <View style={styles.item}>
-          {user.photoURL ? (
+          {item.user_photoURL ? (
             <Image
-              source={{ uri: user.photoURL }}
+              source={{ uri: item.user_photoURL }}
               style={{ width: width * 0.15, height: width * 0.15 }}
               resizeMode={"cover"}
             />
@@ -94,7 +94,7 @@ const RenderItem = ({
               </View>
             </View>
             <View style={styles.postTime}>
-              <Text>{item.post_time}</Text>
+              <Text>{item.post_time.slice(0, 10).replaceAll("-", "/")}</Text>
             </View>
           </View>
         </View>
