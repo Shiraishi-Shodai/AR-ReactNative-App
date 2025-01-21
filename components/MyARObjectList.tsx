@@ -46,7 +46,7 @@ const MyARObjectList = ({ width, height, setModalMode }: MyStampListProps) => {
     (async () => {
       const result = yourPosts
         ? await arObjectManager.listMyARObjects(user.id)
-        : await arObjectManager.getARObjects();
+        : await arObjectManager.listAllARObjects();
       // 何もデータが帰ってこなけらばこの処理は中断する
       if (!result) return;
 

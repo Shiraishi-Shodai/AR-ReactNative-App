@@ -19,7 +19,7 @@ const ARObjectModal = () => {
   // このモーダル内で自分が投稿したリストを表示するのかそれともスタンプ追加画面を表示するのかを管理するState。
   // デフォルトでは投稿一覧を表示するためModalModeEnum.MyListとする
   const [modalMode, setModalMode] = useState<ModalModeEnum>(
-    ModalModeEnum.MyList
+    ModalModeEnum.ARObjectList
   );
 
   return (
@@ -32,7 +32,7 @@ const ARObjectModal = () => {
       <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
         <View style={[styles.overlay]}>
           {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
-          {modalMode == ModalModeEnum.MyList ? (
+          {modalMode == ModalModeEnum.ARObjectList ? (
             <MyARObjectList
               width={width}
               height={height}
