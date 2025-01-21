@@ -62,8 +62,8 @@ export class User {
         displayName: this.displayName,
         photoURL: this.photoURL,
         email: this.email,
-        comments: {},
-        stamps: {},
+        comments: { placeholder: true },
+        stamps: { placeholder: true },
       });
     } catch (e) {
       console.log(e);
