@@ -4,20 +4,20 @@ export abstract class ARObject {
   protected _longitude: number;
   protected _latitude: number;
   protected _altitude: number;
-  protected _post_time: number;
+  protected _post_time: string;
 
   constructor(
     id: string,
     user_id: string,
-    longitude: number,
     latitude: number,
+    longitude: number,
     altitude: number,
-    post_time: number
+    post_time: string
   ) {
     this._id = id;
     this._user_id = user_id;
-    this._longitude = longitude;
     this._latitude = latitude;
+    this._longitude = longitude;
     this._altitude = altitude;
     this._post_time = post_time;
   }
@@ -52,12 +52,13 @@ export abstract class ARObject {
   public set altitude(value: number) {
     this._altitude = value;
   }
-  public get post_time(): number {
+  public get post_time(): string {
     return this._post_time;
   }
-  public set post_time(value: number) {
+  public set post_time(value: string) {
     this._post_time = value;
   }
 
+  // コメントまたはスタンプを編集
   abstract editARObject(object: ARObject): Promise<void>;
 }

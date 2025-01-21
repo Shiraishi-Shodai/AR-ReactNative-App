@@ -1,8 +1,14 @@
 import { ARObject } from "@/classies/ARObject";
 
 export interface ARObjectManager {
-  getARObjects(): Promise<ARObject[]>;
+  // 全ユーザーが投稿したコメントまたはスタンプのデータを取得
+  listAllARObjects(): Promise<ARObject[]>;
+  // コメントまたはスタンプを投稿
   inputARObjects(object: ARObject): Promise<void>;
+  // コメントまたはスタンプを削除
   deleteARObjects(object: ARObject): Promise<void>;
+  // ログイン中のユーザーが投稿したコメントまたはスタンプのデータを取得
   listMyARObjects(user_id: string): Promise<ARObject[]>;
+  // user/user_id/comments or user/user_id/stampsを取得する
+  // getUserCurrenARObjectData(user_id: string): Promise<Object>;
 }

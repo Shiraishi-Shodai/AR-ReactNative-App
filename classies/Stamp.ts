@@ -1,20 +1,13 @@
 import { ARObject } from "./ARObject";
 
 export class Stamp extends ARObject {
-  private _name: string;
-  private _source: string;
+  private _img_path: string;
 
-  public get name(): string {
-    return this._name;
+  public get img_path(): string {
+    return this._img_path;
   }
-  public set name(value: string) {
-    this._name = value;
-  }
-  public get source(): string {
-    return this._source;
-  }
-  public set source(value: string) {
-    this._source = value;
+  public set img_path(value: string) {
+    this._img_path = value;
   }
 
   constructor(
@@ -23,12 +16,11 @@ export class Stamp extends ARObject {
     latitude: number,
     longitude: number,
     altitude: number,
-    name: string,
-    source: string
+    post_time: string,
+    img_path: string
   ) {
-    super(id, user_id, latitude, longitude, altitude);
-    this._name = name;
-    this._source = source;
+    super(id, user_id, latitude, longitude, altitude, post_time);
+    this._img_path = img_path;
   }
 
   async editARObject(object: ARObject): Promise<void> {}

@@ -4,7 +4,7 @@ import database from "@react-native-firebase/database";
 import { Stamp } from "./Stamp";
 
 export class StampManager implements ARObjectManager {
-  async getARObjects(): Promise<Stamp[]> {
+  async listAllARObjects(): Promise<Stamp[]> {
     const ref = database().ref("/Stamp");
     const stampArray: Stamp[] = [];
     try {
@@ -12,16 +12,22 @@ export class StampManager implements ARObjectManager {
       if (snapshot.exists()) {
         const data = snapshot.val();
         for (let key of Object.keys(data)) {
-          const { user_id, latitude, longitude, altitude, name, source } =
-            data[key];
+          const {
+            user_id,
+            latitude,
+            longitude,
+            altitude,
+            post_time,
+            img_path,
+          } = data[key];
           const stamp = new Stamp(
             key,
             user_id,
             latitude,
             longitude,
             altitude,
-            name,
-            source
+            post_time,
+            img_path
           );
 
           stampArray.push(stamp);
@@ -47,16 +53,22 @@ export class StampManager implements ARObjectManager {
       if (snapshot.exists()) {
         const data = snapshot.val();
         for (let key of Object.keys(data)) {
-          const { user_id, latitude, longitude, altitude, name, source } =
-            data[key];
+          const {
+            user_id,
+            latitude,
+            longitude,
+            altitude,
+            post_time,
+            img_path,
+          } = data[key];
           const stamp = new Stamp(
             key,
             user_id,
             latitude,
             longitude,
             altitude,
-            name,
-            source
+            post_time,
+            img_path
           );
 
           stampArray.push(stamp);

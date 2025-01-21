@@ -4,7 +4,7 @@ import database from "@react-native-firebase/database";
 import { Comment } from "./Comment";
 
 export class CommentManager implements ARObjectManager {
-  async getARObjects(): Promise<Comment[]> {
+  async listAllARObjects(): Promise<Comment[]> {
     const ref = database().ref("/Comment");
     const stampArray: Comment[] = [];
     try {
@@ -12,13 +12,15 @@ export class CommentManager implements ARObjectManager {
       if (snapshot.exists()) {
         const data = snapshot.val();
         for (let key of Object.keys(data)) {
-          const { user_id, latitude, longitude, altitude, text } = data[key];
+          const { user_id, latitude, longitude, altitude, post_time, text } =
+            data[key];
           const comment = new Comment(
             key,
             user_id,
             latitude,
             longitude,
             altitude,
+            post_time,
             text
           );
 
@@ -45,13 +47,15 @@ export class CommentManager implements ARObjectManager {
       if (snapshot.exists()) {
         const data = snapshot.val();
         for (let key of Object.keys(data)) {
-          const { user_id, latitude, longitude, altitude, text } = data[key];
+          const { user_id, latitude, longitude, altitude, post_time, text } =
+            data[key];
           const comment = new Comment(
             key,
             user_id,
             latitude,
             longitude,
             altitude,
+            post_time,
             text
           );
 

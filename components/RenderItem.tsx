@@ -1,4 +1,4 @@
-import { Image, useWindowDimensions } from "react-native";
+import { Image } from "react-native";
 import {
   Animated,
   StyleSheet,
@@ -22,6 +22,7 @@ interface RenderItemProps {
   width: number;
   height: number;
 }
+
 const RenderItem = ({
   item,
   animatedValue,
@@ -77,7 +78,7 @@ const RenderItem = ({
                 ellipsizeMode="tail"
               >
                 {ARObjectModalType == ARObjectModalEnum.Stamp
-                  ? (item as Stamp).name
+                  ? (item as Stamp).img_path
                   : (item as Comment).text}
               </Text>
             </View>
