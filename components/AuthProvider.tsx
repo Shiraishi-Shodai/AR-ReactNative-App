@@ -57,7 +57,7 @@ function AuthProvider({ children }: AuthProviderProps) {
             if (isExist == null) await appUser.subscribe();
 
             //   ホーム画面に移動
-            router.navigate("/(tabs)/canvas");
+            router.navigate("/(tabs)/");
         }
     };
 
