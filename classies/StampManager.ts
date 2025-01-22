@@ -2,9 +2,10 @@ import { ARObjectManager } from "@/interfaces/ARObjectManager";
 import { ARObject } from "./ARObject";
 import database from "@react-native-firebase/database";
 import { Stamp } from "./Stamp";
+import { User } from "./User";
 
 export class StampManager implements ARObjectManager {
-    async getARObjects(): Promise<Stamp[]> {
+    async listAllARObjects(): Promise<Stamp[]> {
         const ref = database().ref("/Stamp");
         const stampArray: Stamp[] = [];
         try {
@@ -17,8 +18,8 @@ export class StampManager implements ARObjectManager {
                         latitude,
                         longitude,
                         altitude,
-                        name,
-                        source,
+                        post_time,
+                        img_path,
                     } = data[key];
                     const stamp = new Stamp(
                         key,
@@ -26,8 +27,8 @@ export class StampManager implements ARObjectManager {
                         latitude,
                         longitude,
                         altitude,
-                        name,
-                        source
+                        post_time,
+                        img_path
                     );
 
                     stampArray.push(stamp);
@@ -44,8 +45,8 @@ export class StampManager implements ARObjectManager {
         }
     }
     async inputARObjects(object: ARObject): Promise<void> {}
-    async deleteARObjects(object: ARObject): Promise<void> {}
-    async listMyARObjects(user_id: string): Promise<Stamp[]> {
+    async deleteARObjects(object_id: string, user_id: string): Promise<void> {}
+    async listMyARObjects(user: User): Promise<Stamp[]> {
         const ref = database().ref("/Stamp");
         const stampArray: Stamp[] = [];
         try {
@@ -58,8 +59,8 @@ export class StampManager implements ARObjectManager {
                         latitude,
                         longitude,
                         altitude,
-                        name,
-                        source,
+                        post_time,
+                        img_path,
                     } = data[key];
                     const stamp = new Stamp(
                         key,
@@ -67,8 +68,8 @@ export class StampManager implements ARObjectManager {
                         latitude,
                         longitude,
                         altitude,
-                        name,
-                        source
+                        post_time,
+                        img_path
                     );
 
                     stampArray.push(stamp);

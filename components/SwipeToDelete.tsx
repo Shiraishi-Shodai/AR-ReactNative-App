@@ -1,38 +1,62 @@
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  MutableRefObject,
+} from "react";
 import {
+  ActivityIndicator,
   Animated,
-  Dimensions,
   ListRenderItemInfo,
   StyleSheet,
   Text,
-  TouchableHighlight,
   useWindowDimensions,
   View,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import RenderItem from "./RenderItem";
 import RenderHiddenItem from "./RenderHiddenItem";
+import { ARObject } from "@/classies/ARObject";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectManager } from "@/interfaces/ARObjectManager";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { StampManager } from "@/classies/StampManager";
+import { CommentManager } from "@/classies/CommentManager";
+import { User } from "@/classies/User";
+import { AuthContext } from "./AuthProvider";
 
-//
-const rowTranslateAnimatedValues: { [key: string]: Animated.Value } = {};
-Array(20)
-  .fill("")
-  .forEach((_, i) => {
-    rowTranslateAnimatedValues[`${i}`] = new Animated.Value(1);
-  });
-
-const SwipeToDelete: React.FC = () => {
-  const [listData, setListData] = useState(
-    Array(20)
-      .fill("")
-      .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
-  );
-
+interface SwipeToDeleteProps {
+  arObjectList: ARObject[];
+  disableLeftSwipe: boolean;
+}
+const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({
+  arObjectList,
+  disableLeftSwipe,
+}) => {
+  // アニメーションを制御するref
+  const ref: MutableRefObject<{
+    [id: string]: Animated.Value;
+  }> = useRef({});
+  // デフォルトで全てのキーのアニメーションの値を1に設定
+  for (let item of arObjectList) {
+    ref.current[`${item.id}`] = new Animated.Value(1);
+  }
   const { height, width } = useWindowDimensions();
-
   // アニメーションが実行中か管理する
   const animationIsRunning = useRef(false);
 
+  // 表示しているモーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
+  //データを取得する際に使用するマネージャーをコンテキストのARObjectModalTypeによってどの型を使用するか選択する
+  const arObjectManager: ARObjectManager =
+    ARObjectModalType == ARObjectModalEnum.Stamp
+      ? new StampManager()
+      : new CommentManager();
+
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
+
+  // アイテムをスワイプ中に実行する関数
   const onSwipeValueChange = (swipeData: {
     key: string; // アイテムのキー
     value: number; // スワイプの距離
@@ -45,17 +69,12 @@ const SwipeToDelete: React.FC = () => {
       !animationIsRunning.current
     ) {
       animationIsRunning.current = true; // アニメーション中フラグをtrueにしてアニメーションの二重実行を防止
-      //
-      Animated.timing(rowTranslateAnimatedValues[key], {
+      Animated.timing(ref.current[key], {
         toValue: 0, // アニメーションの最終値
         duration: 200, // アニメーションの時間
         useNativeDriver: false,
       }).start(() => {
-        // アニメーション終了後の処理(アイテムの削除処理)
-        const newData = [...listData];
-        const prevIndex = listData.findIndex((item) => item.key === key);
-        newData.splice(prevIndex, 1);
-        setListData(newData);
+        arObjectManager.deleteARObjects(key, user.id);
         animationIsRunning.current = false; // アニメーションが終わることを宣言
       });
     }
@@ -63,23 +82,22 @@ const SwipeToDelete: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      {/* データベースから取得したデータをarObjectListに代入出来たらビューを表示そうでないならローディングを表示 */}
       <SwipeListView
         disableRightSwipe
-        data={listData}
+        disableLeftSwipe={disableLeftSwipe}
+        data={arObjectList}
+        keyExtractor={(item) => item.id.toString()} // arObjectLlstの各オブジェクトはkeyプロパティを含まないため明示的にidをkeyとして扱う
         renderItem={({ item }) => (
-          // 前に表示されるビュー
           <RenderItem
             item={item}
-            animatedValue={rowTranslateAnimatedValues[item.key]}
+            animatedValue={ref.current[item.id]}
             width={width}
             height={height}
           />
         )}
         // 後ろに隠れている削除アイコンが表示されたビュー
-        renderHiddenItem={(
-          rowData: ListRenderItemInfo<{ key: string; text: string }>,
-          rowMap
-        ) => (
+        renderHiddenItem={(rowData: ListRenderItemInfo<ARObject>, rowMap) => (
           <RenderHiddenItem
             rowData={rowData}
             rowMap={rowMap}
@@ -89,7 +107,7 @@ const SwipeToDelete: React.FC = () => {
         )}
         rightOpenValue={-width}
         previewRowKey={"0"}
-        previewOpenValue={-40}
+        previewOpenValue={-100}
         previewOpenDelay={3000}
         onSwipeValueChange={onSwipeValueChange} // 行のtranslateX値が変更されたときに呼び出されるコールバック。
         useNativeDriver={false}

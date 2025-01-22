@@ -1,15 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
 import HomeScene from "@/components/HomeScene";
-import { AuthContext } from "@/components/AuthProvider";
 import {
   Gesture,
   GestureDetector,
@@ -18,15 +10,19 @@ import {
 } from "react-native-gesture-handler";
 import ControllerModal from "@/components/ControllerModal";
 import { AbsoluteAreaEnum } from "@/constants/AbsoluteAreaEnum";
-import TextInputModal from "@/components/TextInputModal";
-import StampModal from "@/components/StampModal";
 import UserIcon from "@/components/UserIcon";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { runOnJS } from "react-native-reanimated";
 import Setting from "@/components/Setting";
+import ARObjectModal from "@/components/ARObjectModal";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
 
 const HomeScreen = () => {
   const router = useRouter();
+
+  // モーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
 
   // ControllModalの表示非表示をコントロールするステート
   const [controllModalVisible, setControllModalVisible] =
@@ -43,7 +39,7 @@ const HomeScreen = () => {
 
   // 指が今どこにいるか？
   const [absoluteArea, setAbsoluteArea] = useState<AbsoluteAreaEnum>(
-    AbsoluteAreaEnum.Upper
+    AbsoluteAreaEnum.Out
   );
   // 長押しが解除されたか？
   const [isLongPressEND, setIsLongPressEND] = useState(false);
@@ -110,10 +106,21 @@ const HomeScreen = () => {
         break;
       case State.END: // 長押しをして指を離したとき
         const res: AbsoluteAreaEnum = whereAbsoluteArea(absoluteX, absoluteY);
-        setAbsoluteArea(res);
+        // 離した場所に応じて表示するARオブジェクトモーダルを更新。Outは非表示
+        switch (res) {
+          case AbsoluteAreaEnum.Upper:
+            setARObjectModalType(ARObjectModalEnum.Stamp);
+            break;
+          case AbsoluteAreaEnum.Lower:
+            setARObjectModalType(ARObjectModalEnum.Comment);
+            break;
+          case AbsoluteAreaEnum.Out:
+            setARObjectModalType(ARObjectModalEnum.None);
+            break;
+        }
         // 長押しが終わったという状態に更新
         setIsLongPressEND(true);
-        // モーダルを閉じる
+        // // コントロールモーダルを閉じる
         setControllModalVisible(false);
         break;
       case State.CANCELLED: // 長押し中に移動可能な範囲を超えた時
@@ -167,13 +174,10 @@ const HomeScreen = () => {
           settingModalVisible={settingModalVisible}
           setSettingModalVisible={setSettingModalVisible}
         />
-        {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Upper && (
-          // スタンプ追加モーダルを表示
-          <StampModal />
-        )}
-        {isLongPressEND && absoluteArea === AbsoluteAreaEnum.Lower && (
-          // テキスト追加モーダルを表示
-          <TextInputModal />
+        {/* スタンプまたはコメント領域で指を離したときARObjectModalを表示 */}
+        {isLongPressEND && ARObjectModalType != ARObjectModalEnum.None && (
+          // ARオブジェクトモーダルを表示
+          <ARObjectModal />
         )}
       </View>
     </LongPressGestureHandler>

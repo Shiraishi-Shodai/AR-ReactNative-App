@@ -14,6 +14,7 @@ import AuthProvider from "@/components/AuthProvider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 import { StatusBar } from "react-native";
+import ARObjectModalProvider from "@/components/ARObjectModalProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,16 +39,18 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <AuthProvider>
-          <StatusBar translucent={true} />
-          <Stack
-            screenOptions={{
-              headerShown: true,
-            }}
-          >
-            <Stack.Screen name="login" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+          <ARObjectModalProvider>
+            <StatusBar translucent={true} />
+            <Stack
+              screenOptions={{
+                headerShown: true,
+              }}
+            >
+              <Stack.Screen name="login" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </ARObjectModalProvider>
         </AuthProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

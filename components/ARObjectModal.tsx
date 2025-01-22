@@ -2,24 +2,31 @@ import React, { useState } from "react";
 import {
   Modal,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
   useWindowDimensions,
 } from "react-native";
-import MyStampList from "./MyStampList";
+import ViewARObjcetList from "./ViewARObjectList";
 import { ModalModeEnum } from "@/constants/ModalModeEnum";
 import InputStamp from "./InputStamp";
+import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
+import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
+import InputComment from "./InputComment";
 
-const StampModal = () => {
+const ARObjectModal = () => {
   // Modalの表示非表示をコントロールするステート
   const [modlaVisible, setModalVisible] = useState<boolean>(true);
   // デバイスの画面の幅と高さを取得
   const { width, height } = useWindowDimensions();
   // このモーダル内で自分が投稿したリストを表示するのかそれともスタンプ追加画面を表示するのかを管理するState。
-  // デフォルトでは投稿一覧を表示するためModalModeEnum.MyListとする
+  // デフォルトでは投稿一覧を表示するためModalModeEnum.ARObjectListとする
   const [modalMode, setModalMode] = useState<ModalModeEnum>(
-    ModalModeEnum.MyList
+    ModalModeEnum.ARObjectList
   );
+
+  // 表示しているモーダルの種類を取得するコンテキスト
+  const { ARObjectModalType, setARObjectModalType } = useARObjectModalContext();
 
   return (
     <Modal
@@ -29,16 +36,24 @@ const StampModal = () => {
     >
       {/* 背景をタップするとモーダルを閉じる */}
       <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-        <View style={[styles.overlay]}>
+        <View style={styles.overlay}>
           {/* modalModeがMyListなら投稿一覧ビューを、Inputなら追加ビューを表示 */}
-          {modalMode == ModalModeEnum.MyList ? (
-            <MyStampList
+          {modalMode == ModalModeEnum.ARObjectList ? (
+            <ViewARObjcetList
+              width={width}
+              height={height}
+              setModalMode={setModalMode}
+            />
+          ) : // コンテキストがスタンプならスタンプ追加画面を
+          ARObjectModalType == ARObjectModalEnum.Stamp ? (
+            <InputStamp
               width={width}
               height={height}
               setModalMode={setModalMode}
             />
           ) : (
-            <InputStamp
+            // それ以外の場合はコンテキストがコメントなのでコメント追加画面を
+            <InputComment
               width={width}
               height={height}
               setModalMode={setModalMode}
@@ -50,14 +65,14 @@ const StampModal = () => {
   );
 };
 
-export default StampModal;
+export default ARObjectModal;
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   plusView: {
     position: "absolute",
