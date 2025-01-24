@@ -1,3 +1,4 @@
+import React from "react";
 import { Image } from "react-native";
 import {
     Animated,
@@ -9,12 +10,13 @@ import {
 import { ARObject } from "@/classies/ARObject";
 import FeatherIcon from "@expo/vector-icons/Feather";
 import { User } from "@/classies/User";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "./AuthProvider";
 import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
 import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
 import { Stamp } from "@/classies/Stamp";
 import { Comment } from "@/classies/Comment";
+import DetailModal from "./detailModal";
 
 interface RenderItemProps {
     item: ARObject;
@@ -31,6 +33,7 @@ const RenderItem = ({
 }: RenderItemProps) => {
     const { user }: { user: User } = useContext(AuthContext) as { user: User };
     const { ARObjectModalType } = useARObjectModalContext();
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
     return (
         // アニメーションが可能なビュー
@@ -50,7 +53,7 @@ const RenderItem = ({
             <TouchableHighlight
                 style={[styles.rowFront, { height: height * 0.09 }]}
                 underlayColor={"#AAA"}
-                onPress={() => console.log("Hello")}
+                onPress={() => setIsDetailModalVisible(true)}
             >
                 <View style={styles.item}>
                     {item.user_photoURL ? (
@@ -110,6 +113,19 @@ const RenderItem = ({
                     </View>
                 </View>
             </TouchableHighlight>
+            <DetailModal
+                isVisible={isDetailModalVisible}
+                onClose={() => setIsDetailModalVisible(false)}
+                content={item}
+                data={{
+                    id: item.id,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    altitude: item.altitude,
+                    createdAt: item.post_time,
+                    user_id: item.user_id,
+                }}
+            />
         </Animated.View>
     );
 };
