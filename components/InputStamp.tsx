@@ -1,5 +1,5 @@
 import { StampManager } from "@/classies/StampManager";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,9 @@ import { ModalModeEnum } from "@/constants/ModalModeEnum";
 import * as ImagePicker from "expo-image-picker";
 import InputStampButton from "./InputStampButton";
 import uuid from "react-native-uuid";
+import { AuthContext } from "./AuthProvider";
+import { User } from "@/classies/User";
+import { Stamp } from "@/classies/Stamp";
 
 interface InputStampProps {
   width: number;
@@ -22,6 +25,7 @@ interface InputStampProps {
 const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
   const stampManager = new StampManager();
   const [imgBase64, setImgBase64] = useState<string | undefined | null>(null);
+  const { user }: { user: User } = useContext(AuthContext) as { user: User };
 
   // スタンプを選択しbase64形式でデータをbase64変数に格納する
   const pickImage = async () => {
@@ -29,34 +33,56 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.1,
       base64: true,
     });
 
     // スタンプ画像の選択をキャンセルしたとき、処理を終了
     if (!result.canceled) {
       setImgBase64(result.assets[0].base64);
-      console.log(result);
     }
   };
 
   const handleInputStamp = async () => {
     try {
-      const id: string = uuid.v4();
-      console.log(process.env.EXPO_PUBLIC_RSPIADDRESS);
+      const stamp_id: string = uuid.v4();
+      const name = "XXX";
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_RSPIADDRESS}/input_stamp/${id}`,
+        `${process.env.EXPO_PUBLIC_RSPIADDRESS}/inputStamp`,
         {
           headers: { "Content-Type": "application/json" },
           method: "POST",
-          body: JSON.stringify({ imgBase64: imgBase64 }),
+          body: JSON.stringify({
+            user_id: user.id,
+            stamp_id: stamp_id,
+            imgBase64: imgBase64,
+          }),
         }
       );
       const json = await response.json();
-      console.log(json);
-      setImgBase64(null);
+
+      const stampManager = new StampManager();
+
+      const id: string = uuid.v4();
+      const post_time = new Date().toISOString().slice(0, 19);
+      const latitude = 100;
+      const longitude = 100;
+      const altitude = 100;
+      const stamp: Stamp = new Stamp(
+        stamp_id,
+        user.id,
+        latitude,
+        longitude,
+        altitude,
+        post_time,
+        name
+      );
+
+      await stampManager.inputARObjects(stamp);
     } catch (e) {
       console.log("画像送信エラー");
+    } finally {
+      setModalMode(ModalModeEnum.ARObjectList);
     }
   };
 

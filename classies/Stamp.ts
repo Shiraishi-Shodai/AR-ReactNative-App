@@ -1,14 +1,14 @@
 import { ARObject } from "./ARObject";
 
 export class Stamp extends ARObject {
-  private _img_path: string;
+  private _source: string;
   private _name: string;
 
-  public get img_path(): string {
-    return this._img_path;
+  public get source(): string {
+    return this._source;
   }
-  public set img_path(value: string) {
-    this._img_path = value;
+  public set source(value: string) {
+    this._source = value;
   }
 
   public get name(): string {
@@ -25,8 +25,8 @@ export class Stamp extends ARObject {
     longitude: number,
     altitude: number,
     post_time: string,
-    img_path: string,
     name: string,
+    source?: string,
     user_displayName?: string,
     user_photoURL?: string
   ) {
@@ -40,7 +40,7 @@ export class Stamp extends ARObject {
       user_displayName,
       user_photoURL
     );
-    this._img_path = img_path;
+    this._source = source ?? "";
     this._name = name;
   }
 

@@ -67,6 +67,16 @@ const RenderItem = ({
             />
           )}
 
+          {ARObjectModalType == ARObjectModalEnum.Stamp && (
+            <Image
+              source={{
+                uri: `data:image/png;base64,${(item as Stamp).source}`,
+              }}
+              resizeMode={"cover"}
+              style={{ width: width * 0.15, height: width * 0.15 }}
+            />
+          )}
+
           <View style={{ paddingLeft: width * 0.02 }}>
             <View style={{ width: width * 0.6 }}>
               <Text
@@ -78,7 +88,7 @@ const RenderItem = ({
                 ellipsizeMode="tail"
               >
                 {ARObjectModalType == ARObjectModalEnum.Stamp
-                  ? (item as Stamp).img_path
+                  ? (item as Stamp).name
                   : (item as Comment).text}
               </Text>
             </View>
