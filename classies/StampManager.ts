@@ -175,7 +175,9 @@ export class StampManager implements ARObjectManager {
             altitude,
             post_time,
             name,
-            source
+            source,
+            user.displayName as string,
+            user.photoURL as string
           );
           stampArray.push(stamp);
         });

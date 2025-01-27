@@ -67,9 +67,10 @@ function HomeScene() {
   // 各オブジェクトに設定するxyzを計算
   const getRandomXYZ = () => {
     const max = 5;
-    const x = Math.floor(Math.random() * max) + 1;
-    const y = Math.floor(Math.random() * max) + 1;
-    const z = -(Math.floor(Math.random() * max) + 1);
+    const min = -5;
+    const x = Math.floor(Math.random() * (max - min + 1) + min);
+    const y = Math.floor(Math.random() * (max - min + 1) + min);
+    const z = Math.floor(Math.random() * (max - min + 1) + min);
     return { x, y, z };
   };
 
