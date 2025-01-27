@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -107,18 +108,16 @@ const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
                     }}
                   />
                 </View>
-                <View style={styles.post_timeView}>
-                  <Text>YYYY/MM/DD</Text>
-                </View>
               </View>
             </View>
           </View>
-          <Pressable
+          <TouchableHighlight
             onPress={handleInputComment}
+            underlayColor="#CCCCCC" // 押下時の色
             style={[styles.buttonView, { borderRadius: width * 0.02 }]}
           >
             <Text style={styles.buttonText}>AR上にコメントを追加</Text>
-          </Pressable>
+          </TouchableHighlight>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#EEEEEE",
     position: "relative",
     top: "3%",
     height: "10%",
