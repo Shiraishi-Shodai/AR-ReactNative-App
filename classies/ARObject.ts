@@ -7,6 +7,9 @@ export abstract class ARObject {
   protected _latitude: number;
   protected _altitude: number;
   protected _post_time: string;
+  private _x: number;
+  private _y: number;
+  private _z: number;
 
   // データベースに格納するデータ
   constructor(
@@ -17,7 +20,10 @@ export abstract class ARObject {
     altitude: number,
     post_time: string,
     user_displayName?: string,
-    user_photoURL?: string
+    user_photoURL?: string,
+    x?: number,
+    y?: number,
+    z?: number
   ) {
     this._id = id;
     this._user_id = user_id;
@@ -27,6 +33,9 @@ export abstract class ARObject {
     this._post_time = post_time;
     this._user_displayName = user_displayName ?? "";
     this._user_photoURL = user_photoURL ?? "";
+    this._x = x ?? 0;
+    this._y = y ?? 0;
+    this._z = z ?? 0;
   }
 
   public get id(): string {
@@ -76,6 +85,27 @@ export abstract class ARObject {
   }
   public set post_time(value: string) {
     this._post_time = value;
+  }
+
+  public get x(): number {
+    return this._x;
+  }
+  public set x(value: number) {
+    this._x = value;
+  }
+
+  public get y(): number {
+    return this._y;
+  }
+  public set y(value: number) {
+    this._y = value;
+  }
+
+  public get z(): number {
+    return this._z;
+  }
+  public set z(value: number) {
+    this._z = value;
   }
 
   // コメントまたはスタンプを編集
