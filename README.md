@@ -1,12 +1,16 @@
 # AR React App
 
+<div style="width: 100%; height: 300px; overflow: hidden;">
+  <img src="./assets/images/adaptive-icon.png" style="width: 100%; height: auto; object-fit: cover;" alt="app icon">
+</div>
+
 ## 概要
 
 AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 ## 背景
 
-[Na7ti](https://github.com/Na7ti)が以前作った[web アプリ](https://github.com/Na7ti/webapp)をモバイルアプリを元に AR 上の SNS にリメイクする。
+[Na7ti](https://github.com/Na7ti)さんが以前作った[web アプリ](https://github.com/Na7ti/webapp)をモバイルアプリを元に AR 上の SNS にリメイクする。
 
 ## 主な機能
 
@@ -53,3 +57,7 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 - プロジェクトの進捗管理を行わなかった。
 - 自分の頭に描いていることをドキュメントや図に表してチームに共有することなく、単独で開発を行ってしまった。
+- チームメンバー 1 人 1 人と向き合って、それぞれが向いている分野の役割を見つけ出せればよかったかもしれない。
+- 位置情報を固定するために、かなりを時間を消費してしまった。難しいところは後回しにして手を付けられる場所から進めて行くほうが効率的だったと感じる。
+- 授業のはじめと終わりの進捗報告は途中で終わらせることなく、続けるべきだった。
+- 要件定義などで意見を出す際には、決して否定せずどんどんみんなの意見を発言してもらうようにすべきだった。
