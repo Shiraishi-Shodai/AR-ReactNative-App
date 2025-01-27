@@ -64,6 +64,7 @@ function HomeScene() {
     };
   };
 
+  // 各オブジェクトに設定するxyzを計算
   const getRandomXYZ = () => {
     const max = 5;
     const x = Math.floor(Math.random() * max) + 1;

@@ -99,11 +99,10 @@ const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
                 </View>
                 <View style={styles.inputViewItem}>
                   <TextInput
-                    placeholder="hei"
+                    placeholder="コメントを入力してください"
                     multiline={true}
                     onChangeText={(text: string) => {
                       textRef.current = text;
-                      console.log(textRef.current);
                     }}
                   />
                 </View>
