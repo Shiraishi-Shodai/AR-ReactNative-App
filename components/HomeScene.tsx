@@ -16,6 +16,7 @@ import {
 } from "@reactvision/react-viro";
 import React, { useEffect, useState } from "react";
 import database from "@react-native-firebase/database";
+import { getRandomColor, setXYZ } from "@/lib";
 
 function HomeScene() {
   // カメラの状態
@@ -64,24 +65,6 @@ function HomeScene() {
     };
   };
 
-  // 各オブジェクトに設定するxyzを計算
-  const getRandomXYZ = () => {
-    const max = 5;
-    const min = -5;
-    const x = Math.floor(Math.random() * (max - min + 1) + min);
-    const y = Math.floor(Math.random() * (max - min + 1) + min);
-    const z = Math.floor(Math.random() * (max - min + 1) + min);
-    return { x, y, z };
-  };
-
-  // 各オブジェクトにxyzのポジションを設定
-  const setXYZ = (ARObject: ARObject) => {
-    const { x, y, z } = getRandomXYZ();
-    ARObject.x = x;
-    ARObject.y = y;
-    ARObject.z = z;
-    return ARObject;
-  };
   //   カメラ初期化
   const onInitialized = (state: any, reason: ViroTrackingReason) => {
     if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
@@ -105,7 +88,7 @@ function HomeScene() {
             key={index}
             position={[item.x, item.y, item.z]}
             style={{ fontSize: 100, fontFamily: "NotoSansCJK" }}
-            color={"red"}
+            color={getRandomColor()}
           />
         ))
       ) : (
@@ -113,7 +96,7 @@ function HomeScene() {
           text="Stamp Found"
           position={[0, 0, -1]}
           style={{ fontSize: 20 }}
-          color={"red"}
+          color={getRandomColor()}
         />
       )}
 
@@ -124,8 +107,6 @@ function HomeScene() {
             placeholderSource={require("../assets/images/a.png")}
             key={index}
             position={[item.x, item.y, item.z]}
-            // width={2}
-            // height={2}
           />
         ))
       ) : (
@@ -133,7 +114,7 @@ function HomeScene() {
           text="Stamp Found"
           position={[0, 0, -1]}
           style={{ fontSize: 20 }}
-          color={"red"}
+          color={getRandomColor()}
         />
       )}
     </ViroARScene>
