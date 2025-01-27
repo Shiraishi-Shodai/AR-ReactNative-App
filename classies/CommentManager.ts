@@ -11,7 +11,6 @@ export class CommentManager implements ARObjectManager {
     const commentArray: Comment[] = [];
     // コメントを投稿したユーザーid情報を管理するインデックス(key: user_id: value userオブジェクト)
     const userIndex: { [K: string]: User | undefined } = {};
-    const now = new Date();
     try {
       // ①全コメントオブジェクトを取得
       const comments_snapshot = await ref
@@ -21,8 +20,15 @@ export class CommentManager implements ARObjectManager {
         const comment_data = comments_snapshot.val();
 
         Object.entries(comment_data).map(([key, value]) => {
-          const { user_id, latitude, longitude, altitude, post_time, text } =
-            comment_data[key];
+          const {
+            user_id,
+            latitude,
+            longitude,
+            altitude,
+            post_time,
+            text,
+            color,
+          } = comment_data[key];
           const comment = new Comment(
             key,
             user_id,
@@ -30,7 +36,8 @@ export class CommentManager implements ARObjectManager {
             longitude,
             altitude,
             post_time,
-            text
+            text,
+            color
           );
 
           // ②userIndexのキーに保存していないuser_idがあればuserIndexのキーに保存.キーに対応する値はundefinedとする
@@ -88,6 +95,7 @@ export class CommentManager implements ARObjectManager {
         longitude: object.longitude,
         post_time: object.post_time,
         text: object.text,
+        color: object.color,
         user_id_post_time: `${object.user_id}_${object.post_time}`,
       },
     };
@@ -129,7 +137,7 @@ export class CommentManager implements ARObjectManager {
 
         // ②コメントオブジェクトにログイン中のユーザーの名前と画像のURLを追加
         Object.entries(comment_data).map(([key, _]) => {
-          const { latitude, longitude, altitude, post_time, text } =
+          const { latitude, longitude, altitude, post_time, text, color } =
             comment_data[key];
           const comment = new Comment(
             key,
@@ -139,6 +147,7 @@ export class CommentManager implements ARObjectManager {
             altitude,
             post_time,
             text,
+            color,
             user.displayName as string,
             user.photoURL as string
           );

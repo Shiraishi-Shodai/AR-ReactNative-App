@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -19,6 +20,7 @@ import { Comment } from "@/classies/Comment";
 import uuid from "react-native-uuid";
 import { CommentManager } from "@/classies/CommentManager";
 import useARObjectBaseInfomation from "@/hooks/useARObjectBaseInfomation";
+import { getRandomColor } from "@/lib";
 
 interface InputCommentProps {
   width: number;
@@ -41,7 +43,8 @@ const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
       longitude,
       altitude,
       post_time,
-      textRef.current
+      textRef.current,
+      getRandomColor()
     );
     const commentManager: CommentManager = new CommentManager();
     try {
@@ -105,18 +108,16 @@ const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
                     }}
                   />
                 </View>
-                <View style={styles.post_timeView}>
-                  <Text>YYYY/MM/DD</Text>
-                </View>
               </View>
             </View>
           </View>
-          <Pressable
+          <TouchableHighlight
             onPress={handleInputComment}
+            underlayColor="#CCCCCC" // 押下時の色
             style={[styles.buttonView, { borderRadius: width * 0.02 }]}
           >
             <Text style={styles.buttonText}>AR上にコメントを追加</Text>
-          </Pressable>
+          </TouchableHighlight>
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#EEEEEE",
     position: "relative",
     top: "3%",
     height: "10%",
