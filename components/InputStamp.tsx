@@ -80,7 +80,7 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
 
       await stampManager.inputARObjects(stamp);
     } catch (e) {
-      console.log("画像送信エラー");
+      console.log(e);
     } finally {
       setModalMode(ModalModeEnum.ARObjectList);
     }

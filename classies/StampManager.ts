@@ -123,7 +123,7 @@ export class StampManager implements ARObjectManager {
     }
   }
   async deleteARObjects(object_id: string, user_id: string): Promise<void> {
-    const usersRef = `users/${user_id}/stamps/${object_id}`;
+    const usersRef = `users/${user_id}/stamps/${user_id}/${object_id}`;
     const stampsRef = `stamps/${object_id}`;
     const updateObject = {
       [usersRef]: null,
@@ -132,9 +132,22 @@ export class StampManager implements ARObjectManager {
 
     try {
       await database().ref("/").update(updateObject);
-      console.log("スタンプ削除完了");
+      console.log("スタンプ削除完了しました");
     } catch (e) {
-      console.log("スタンプ削除エラー");
+      console.log("スタンプ削除エラーしました");
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_RSPIADDRESS}/deleteStamp/${user_id}/${object_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const json = await response.json();
+      console.log(json.message);
+    } catch (e) {
+      console.log("ラズパイエラー");
     }
   }
   async listMyARObjects(user: User): Promise<Stamp[]> {
