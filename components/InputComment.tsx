@@ -19,6 +19,7 @@ import { Comment } from "@/classies/Comment";
 import uuid from "react-native-uuid";
 import { CommentManager } from "@/classies/CommentManager";
 import useARObjectBaseInfomation from "@/hooks/useARObjectBaseInfomation";
+import { getRandomColor } from "@/lib";
 
 interface InputCommentProps {
   width: number;
@@ -41,7 +42,8 @@ const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
       longitude,
       altitude,
       post_time,
-      textRef.current
+      textRef.current,
+      getRandomColor()
     );
     const commentManager: CommentManager = new CommentManager();
     try {

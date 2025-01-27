@@ -88,7 +88,7 @@ function HomeScene() {
             key={index}
             position={[item.x, item.y, item.z]}
             style={{ fontSize: 100, fontFamily: "NotoSansCJK" }}
-            color={getRandomColor()}
+            color={item.color}
           />
         ))
       ) : (
@@ -96,7 +96,7 @@ function HomeScene() {
           text="Stamp Found"
           position={[0, 0, -1]}
           style={{ fontSize: 20 }}
-          color={getRandomColor()}
+          color={"red"}
         />
       )}
 
@@ -114,7 +114,7 @@ function HomeScene() {
           text="Stamp Found"
           position={[0, 0, -1]}
           style={{ fontSize: 20 }}
-          color={getRandomColor()}
+          color={"red"}
         />
       )}
     </ViroARScene>

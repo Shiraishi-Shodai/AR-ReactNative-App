@@ -18,6 +18,7 @@ import { AuthContext } from "./AuthProvider";
 import { User } from "@/classies/User";
 import { Stamp } from "@/classies/Stamp";
 import { TextInput } from "react-native-gesture-handler";
+import useARObjectBaseInfomation from "@/hooks/useARObjectBaseInfomation";
 
 interface InputStampProps {
   width: number;
@@ -30,6 +31,8 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
   // 画像の名前
   const [imgName, setImgName] = useState<string>("");
+  const { id, post_time, latitude, longitude, altitude } =
+    useARObjectBaseInfomation();
 
   // スタンプを選択しbase64形式でデータをbase64変数に格納する
   const pickImage = async () => {
@@ -49,7 +52,6 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
 
   const handleInputStamp = async () => {
     try {
-      const stamp_id: string = uuid.v4();
       const name = imgName;
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_RSPIADDRESS}/inputStamp`,
@@ -58,22 +60,16 @@ const InputStamp = ({ width, height, setModalMode }: InputStampProps) => {
           method: "POST",
           body: JSON.stringify({
             user_id: user.id,
-            stamp_id: stamp_id,
+            stamp_id: id,
             imgBase64: imgBase64,
           }),
         }
       );
       const json = await response.json();
-
+      console.log(json);
       const stampManager = new StampManager();
-
-      const id: string = uuid.v4();
-      const post_time = new Date().toISOString().slice(0, 19);
-      const latitude = 100;
-      const longitude = 100;
-      const altitude = 100;
       const stamp: Stamp = new Stamp(
-        stamp_id,
+        id,
         user.id,
         latitude,
         longitude,

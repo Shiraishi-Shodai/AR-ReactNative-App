@@ -65,7 +65,7 @@ export const getRandomXYZ = () => {
   const min = -5;
   const x = Math.floor(Math.random() * (max - min + 1) + min);
   const y = Math.floor(Math.random() * (max - min + 1) + min);
-  const z = Math.floor(Math.random() * (max - min + 1) + min);
+  const z = -Math.floor(Math.random() * (max + 1));
   return { x, y, z };
 };
 
