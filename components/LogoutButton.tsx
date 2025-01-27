@@ -31,8 +31,9 @@ const LogOutButton = () => {
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 20,
+    width: "80%",
     padding: 10,
+    bottom: "8%",
     backgroundColor: "#0c0d0e",
     alignItems: "center",
   },

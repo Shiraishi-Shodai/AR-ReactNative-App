@@ -1,8 +1,13 @@
+import { ARObject } from "@/classies/ARObject";
 import { Comment } from "@/classies/Comment";
+import { CommentManager } from "@/classies/CommentManager";
+import { Stamp } from "@/classies/Stamp";
+import { StampManager } from "@/classies/StampManager";
 import {
   ViroARScene,
   ViroBox,
   ViroButton,
+  ViroImage,
   ViroMaterials,
   ViroNode,
   ViroText,
@@ -10,47 +15,73 @@ import {
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
 import React, { useEffect, useState } from "react";
-import * as Location from "expo-location";
-import { distanceBetweenCoordinates } from "@/lib";
-
-// 現在の座標のインターフェース
-interface currentLocationInterface {
-  latitude: number;
-  longitude: number;
-  altitude: number | null;
-}
-
-// 現在地からオブジェクトの位置を計算したインターフェース
-interface ViroPositionInterface {
-  viroX: number;
-  viroY: number;
-  viroZ: number;
-}
+import database from "@react-native-firebase/database";
 
 function HomeScene() {
-  // 蛍光色のマテリアルを作成
-  ViroMaterials.createMaterials({
-    fluorescent: {
-      diffuseColor: "#00FF00", // 蛍光グリーンの色
-    },
-  });
   // カメラの状態
   const [initialText, setInitialText] = useState("");
+  const commentManager = new CommentManager();
+  const stampManager = new StampManager();
+  const [commentList, setCommentList] = useState<Comment[]>([]);
+  const [stampList, setStampList] = useState<Stamp[]>([]);
 
-  //真北と現在向いている方角の差の角度
-  const [heading, setHeading] = useState(0);
+  // 全オブジェクトを取得
+  const listARObject = async () => {
+    const commentResponse = (await commentManager.listAllARObjects()).map(
+      (stamp) => setXYZ(stamp)
+    );
+    const stampResponse = (await stampManager.listAllARObjects()).map(
+      (comment) => setXYZ(comment)
+    );
+    setCommentList(commentResponse as Comment[]);
+    setStampList(stampResponse as Stamp[]);
+    // console.log(commentResponse, stampResponse);
+  };
 
-  // 位置情報緒のパーミッションエラーメッセージ
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  // Firebaseが変更されるとレンダリングするcommentListやstampListも更新する
+  const watchingFirebase = async () => {
+    const commentNode = database().ref("/comments");
+    const stampNode = database().ref("/stamps");
+    const commentNodeListener = commentNode.on("value", async () => {
+      console.log("コメントの監視");
+      const commentResponse = (await commentManager.listAllARObjects()).map(
+        (stamp) => setXYZ(stamp)
+      );
+      setCommentList(commentResponse as Comment[]);
+    });
 
-  //   viroのポジション
-  const [commentPosition, setCommentPosition] = useState<ViroPositionInterface>(
-    { viroX: 0, viroY: 10, viroZ: -10 }
-  );
+    const stampNodeListener = stampNode.on("value", async () => {
+      console.log("スタンプの監視");
+      const stampResponse = (await stampManager.listAllARObjects()).map(
+        (stamp) => setXYZ(stamp)
+      );
+      setStampList(stampResponse as Stamp[]);
+    });
 
-  // 表示するオブジェクトのサンプルデータ
-  const comment = new Comment("id1", "Hello World", 33.8344104, 132.7659512);
+    return () => {
+      commentNode.off("value", commentNodeListener);
+      stampNode.off("value", stampNodeListener);
+    };
+  };
 
+  // 各オブジェクトに設定するxyzを計算
+  const getRandomXYZ = () => {
+    const max = 5;
+    const min = -5;
+    const x = Math.floor(Math.random() * (max - min + 1) + min);
+    const y = Math.floor(Math.random() * (max - min + 1) + min);
+    const z = Math.floor(Math.random() * (max - min + 1) + min);
+    return { x, y, z };
+  };
+
+  // 各オブジェクトにxyzのポジションを設定
+  const setXYZ = (ARObject: ARObject) => {
+    const { x, y, z } = getRandomXYZ();
+    ARObject.x = x;
+    ARObject.y = y;
+    ARObject.z = z;
+    return ARObject;
+  };
   //   カメラ初期化
   const onInitialized = (state: any, reason: ViroTrackingReason) => {
     if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
@@ -60,141 +91,51 @@ function HomeScene() {
     }
   };
 
-  const getCurrentLocationPermission = async () => {
-    //   位置情報のリクエスト
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was deniend");
-      return;
-    }
-  };
-
-  //現在地の座標を取得しsetCurrentLocationにセットする
-  const getCurrentLocation = async () => {
-    // 現在地の緯度、経度、高度を取得
-    const { latitude, longitude, altitude } = (
-      await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-        distanceInterval: 5,
-        timeInterval: 2000,
-      })
-    ).coords;
-
-    const currentLocation: currentLocationInterface = {
-      latitude,
-      longitude,
-      altitude,
-    };
-
-    return currentLocation;
-  };
-
-  const viewComment = async () => {
-    // 現在の位置情報を取得
-    const currentLocation: currentLocationInterface =
-      await getCurrentLocation();
-    if (
-      currentLocation.altitude === null ||
-      currentLocation.latitude === null ||
-      currentLocation.longitude === null
-    )
-      return;
-    // 現在地からサンプルデータまでの距離を計算
-    const viroX = distanceBetweenCoordinates(
-      currentLocation.latitude,
-      comment.longitude,
-      0,
-      currentLocation.latitude,
-      currentLocation.longitude
-    );
-
-    const viroZ = distanceBetweenCoordinates(
-      comment.latitude,
-      currentLocation.longitude,
-      0,
-      currentLocation.latitude,
-      currentLocation.longitude
-    );
-
-    console.log(
-      currentLocation.altitude,
-      currentLocation.latitude,
-      currentLocation.longitude
-    );
-
-    setCommentPosition({
-      viroX: viroX,
-      viroY: 0,
-      viroZ: -viroZ,
-    });
-  };
   useEffect(() => {
-    getCurrentLocationPermission();
-    let headingListener: Location.LocationSubscription | null = null;
-
-    const fetchHeading = async () => {
-      // 権限をリクエスト
-      const { granted } = await Location.requestForegroundPermissionsAsync();
-      if (!granted) {
-        console.error("コンパスへのアクセスが許可されていません。");
-        return;
-      }
-
-      // 初期の方位を取得
-      const headingData = await Location.getHeadingAsync();
-      setHeading(headingData.trueHeading);
-
-      viewComment();
-
-      // 方位の変更を監視
-      // headingListener = await Location.watchHeadingAsync((headingData) => {
-      //   setHeading(headingData.trueHeading);
-      // });
-    };
-
-    fetchHeading();
-
-    // コンポーネントのクリーンアップでリスナーを削除
-    // return () => {
-    //   if (headingListener) {
-    //     headingListener.remove();
-    //   }
-    // };
+    listARObject();
+    watchingFirebase();
   }, []);
-
-  useEffect(() => {
-    console.log(
-      `コメントの位置: ${commentPosition.viroX}, ${commentPosition.viroY}, ${commentPosition.viroZ}`
-    );
-  }, [commentPosition]);
-
-  useEffect(() => {
-    console.log(`現在の方位: ${heading}`);
-  }, [heading]);
 
   return (
     <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroButton
-        source={require("../assets/images/favicon.png")}
-        position={[0, 0, -3]}
-        onClick={viewComment}
-      />
-      <ViroNode rotation={[0, -heading, 0]}>
+      {commentList ? (
+        commentList.map((item, index) => (
+          <ViroText
+            text={item.text}
+            key={index}
+            position={[item.x, item.y, item.z]}
+            style={{ fontSize: 100, fontFamily: "NotoSansCJK" }}
+            color={"red"}
+          />
+        ))
+      ) : (
         <ViroText
-          text="This is Object"
-          style={{ fontSize: 200, color: "red" }}
-          position={[0, 0, -5]}
-        ></ViroText>
-        <ViroBox
-          scale={[0.5, 0.5, 0.5]}
-          position={[
-            -commentPosition.viroX,
-            commentPosition.viroY,
-            commentPosition.viroZ,
-          ]}
-          materials={["fluorescent"]}
+          text="Stamp Found"
+          position={[0, 0, -1]}
+          style={{ fontSize: 20 }}
+          color={"red"}
         />
-      </ViroNode>
+      )}
+
+      {stampList ? (
+        stampList.map((item, index) => (
+          <ViroImage
+            source={{ uri: `data:image/png;base64,${item.source}}` }}
+            placeholderSource={require("../assets/images/a.png")}
+            key={index}
+            position={[item.x, item.y, item.z]}
+            // width={2}
+            // height={2}
+          />
+        ))
+      ) : (
+        <ViroText
+          text="Stamp Found"
+          position={[0, 0, -1]}
+          style={{ fontSize: 20 }}
+          color={"red"}
+        />
+      )}
     </ViroARScene>
   );
 }

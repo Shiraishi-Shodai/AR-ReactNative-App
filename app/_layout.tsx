@@ -11,6 +11,10 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import AuthProvider from "@/components/AuthProvider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "../global.css";
+import { StatusBar } from "react-native";
+import ARObjectModalProvider from "@/components/ARObjectModalProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -19,6 +23,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    NotoSansJP: require("../assets/fonts/Noto_Sans_JP/NotoSansJP-Regular.ttf"),
+    NotoSansCJK: require("../assets/fonts/NotoSansCJKJapanese/NotoSansCJKjp-Regular.otf"),
   });
 
   useEffect(() => {
@@ -32,20 +38,23 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AuthProvider>
-        <Stack
-          screenOptions={{
-            headerStyle: {
-              // backgroundColor: "gray",
-            },
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </AuthProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <AuthProvider>
+          <ARObjectModalProvider>
+            <StatusBar translucent={true} />
+            <Stack
+              screenOptions={{
+                headerShown: true,
+              }}
+            >
+              <Stack.Screen name="login" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </ARObjectModalProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
