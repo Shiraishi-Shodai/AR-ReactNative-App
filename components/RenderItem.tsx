@@ -118,12 +118,7 @@ const RenderItem = ({
                 onClose={() => setIsDetailModalVisible(false)}
                 content={item}
                 data={{
-                    id: item.id,
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                    altitude: item.altitude,
                     createdAt: item.post_time,
-                    user_id: item.user_id,
                 }}
             />
         </Animated.View>

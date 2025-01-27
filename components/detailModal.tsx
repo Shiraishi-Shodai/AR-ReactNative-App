@@ -4,27 +4,16 @@ import { Comment } from "@/classies/Comment";
 import { ARObjectModalEnum } from "@/constants/ARObjectModalEnum";
 import { useARObjectModalContext } from "@/hooks/useARObjectModalContext";
 import React from "react";
-import {
-    Modal,
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    Dimensions,
-} from "react-native";
+import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Image } from "react-native";
+import FeatherIcon from "@expo/vector-icons/Feather";
 
 interface DetailModalProps {
     isVisible: boolean;
     onClose: () => void;
     content: ARObject;
     data: {
-        id: string;
-        latitude: number;
-        longitude: number;
-        altitude: number;
         createdAt: string;
-        user_id: string;
     };
 }
 
@@ -35,8 +24,6 @@ const DetailModal = ({
     data,
 }: DetailModalProps) => {
     const { ARObjectModalType } = useARObjectModalContext();
-    const width = Dimensions.get("window").width;
-    const height = Dimensions.get("window").height;
 
     return (
         <Modal
@@ -64,25 +51,6 @@ const DetailModal = ({
                         <View style={styles.userName}>
                             <Text>{content.user_displayName}</Text>
                         </View>
-                        <Text
-                            style={{
-                                fontSize: 13,
-                                fontWeight: "bold",
-                            }}
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                        >
-                            {ARObjectModalType == ARObjectModalEnum.Stamp
-                                ? (content as Stamp).img_path
-                                : (content as Comment).text}
-                        </Text>
-
-                        <View style={styles.location}>
-                            <Text>
-                                {content.latitude}, {content.longitude},{" "}
-                                {content.altitude}
-                            </Text>
-                        </View>
                         <View style={styles.postTime}>
                             <Text>
                                 {data.createdAt
@@ -90,6 +58,22 @@ const DetailModal = ({
                                     .replaceAll("-", "/")}
                             </Text>
                         </View>
+                    </View>
+                    <Text
+                        style={styles.detailContent}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
+                        {ARObjectModalType == ARObjectModalEnum.Stamp
+                            ? (content as Stamp).img_path
+                            : (content as Comment).text}
+                    </Text>
+                    <View style={styles.location}>
+                        <FeatherIcon name="map-pin" size={24} />
+                        <Text>
+                            {content.latitude}, {content.longitude},{" "}
+                            {content.altitude}
+                        </Text>
                     </View>
 
                     <TouchableOpacity
@@ -125,19 +109,10 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     },
-    location: {
-        fontSize: 14,
-        color: "#666",
-        marginBottom: 20,
-    },
-    postTime: {
-        fontSize: 14,
-        color: "#666",
-        marginBottom: 20,
-    },
     userInfo: {
         display: "flex",
         flexDirection: "row",
+        alignItems: "center",
         marginBottom: 20,
     },
     iconSize: {
@@ -146,6 +121,31 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
     userName: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#666",
+        marginLeft: 10,
+        marginBottom: 0,
+    },
+    postTime: {
+        fontSize: 14,
+        color: "#666",
+        marginBottom: 20,
+        marginLeft: "auto",
+    },
+    detailContent: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 8,
+        backgroundColor: "#f9f9f9",
+        minHeight: 40,
+        width: "100%",
+    },
+    location: {
+        display: "flex",
+        flexDirection: "row",
         fontSize: 14,
         color: "#666",
         marginBottom: 20,
