@@ -18,6 +18,7 @@ import EntypoIcon from "react-native-vector-icons/Entypo";
 import { Comment } from "@/classies/Comment";
 import uuid from "react-native-uuid";
 import { CommentManager } from "@/classies/CommentManager";
+import useARObjectBaseInfomation from "@/hooks/useARObjectBaseInfomation";
 
 interface InputCommentProps {
   width: number;
@@ -27,14 +28,12 @@ interface InputCommentProps {
 const InputComment = ({ width, height, setModalMode }: InputCommentProps) => {
   const { user }: { user: User } = useContext(AuthContext) as { user: User };
   const textRef = useRef<string>("");
+  const { id, post_time, latitude, longitude, altitude } =
+    useARObjectBaseInfomation();
 
   // コメントオブジェクトを作成し、CommentManagerに挿入処理を委託する
   const handleInputComment = async () => {
-    const id: string = uuid.v4();
-    const post_time = new Date().toISOString().slice(0, 19);
-    const latitude = 100;
-    const longitude = 100;
-    const altitude = 100;
+    console.log(id, post_time, latitude, longitude, altitude);
     const comment: Comment = new Comment(
       id,
       user.id,

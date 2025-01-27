@@ -107,7 +107,4 @@ export abstract class ARObject {
   public set z(value: number) {
     this._z = value;
   }
-
-  // コメントまたはスタンプを編集
-  abstract editARObject(object: ARObject): Promise<void>;
 }

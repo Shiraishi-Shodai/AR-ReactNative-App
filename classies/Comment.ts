@@ -33,7 +33,4 @@ export class Comment extends ARObject {
     );
     this._text = text;
   }
-
-  // 編集
-  async editARObject(object: ARObject): Promise<void> {}
 }

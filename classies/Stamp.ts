@@ -43,6 +43,4 @@ export class Stamp extends ARObject {
     this._source = source ?? "";
     this._name = name;
   }
-
-  async editARObject(object: ARObject): Promise<void> {}
 }
