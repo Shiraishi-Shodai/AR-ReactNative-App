@@ -15,6 +15,7 @@ import {
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
 import React, { useEffect, useState } from "react";
+import database from "@react-native-firebase/database";
 
 function HomeScene() {
   // カメラの状態
@@ -34,7 +35,33 @@ function HomeScene() {
     );
     setCommentList(commentResponse as Comment[]);
     setStampList(stampResponse as Stamp[]);
-    console.log(commentResponse, stampResponse);
+    // console.log(commentResponse, stampResponse);
+  };
+
+  // Firebaseが変更されるとレンダリングするcommentListやstampListも更新する
+  const watchingFirebase = async () => {
+    const commentNode = database().ref("/comments");
+    const stampNode = database().ref("/stamps");
+    const commentNodeListener = commentNode.on("value", async () => {
+      console.log("コメントの監視");
+      const commentResponse = (await commentManager.listAllARObjects()).map(
+        (stamp) => setXYZ(stamp)
+      );
+      setCommentList(commentResponse as Comment[]);
+    });
+
+    const stampNodeListener = stampNode.on("value", async () => {
+      console.log("スタンプの監視");
+      const stampResponse = (await stampManager.listAllARObjects()).map(
+        (stamp) => setXYZ(stamp)
+      );
+      setStampList(stampResponse as Stamp[]);
+    });
+
+    return () => {
+      commentNode.off("value", commentNodeListener);
+      stampNode.off("value", stampNodeListener);
+    };
   };
 
   const getRandomXYZ = () => {
@@ -64,6 +91,7 @@ function HomeScene() {
 
   useEffect(() => {
     listARObject();
+    watchingFirebase();
   }, []);
 
   return (
