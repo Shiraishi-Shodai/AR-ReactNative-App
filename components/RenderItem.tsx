@@ -91,7 +91,7 @@ const RenderItem = ({
               {/* 緯度、軽度、高度を表示 */}
               <View>
                 <Text>
-                  {item.latitude.toFixed(4)}, {item.longitude.toFixed(4)},{" "}
+                  {item.latitude.toFixed(4)}, {item.longitude.toFixed(4)},
                   {item.altitude.toFixed(4)}
                 </Text>
               </View>

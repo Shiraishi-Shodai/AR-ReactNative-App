@@ -56,7 +56,13 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
-      ["expo-font", ["./assets/font/Noto_Sans_JP/*"]]
+      [
+        "expo-font",
+        [
+          "./assets/font/Noto_Sans_JP/*",
+          "./assets/fonts/NotoSansCJKJapanese/NotoSansCJKjp-Regular.otf"
+        ]
+      ]
     ],
     "experiments": {
       "typedRoutes": true

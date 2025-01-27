@@ -5,18 +5,14 @@ import { Stamp } from "@/classies/Stamp";
 import { StampManager } from "@/classies/StampManager";
 import {
   ViroARScene,
-  ViroBox,
-  ViroButton,
   ViroImage,
-  ViroMaterials,
-  ViroNode,
   ViroText,
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
 import React, { useEffect, useState } from "react";
 import database from "@react-native-firebase/database";
-import { getRandomColor, setXYZ } from "@/lib";
+import { setXYZ } from "@/lib";
 
 function HomeScene() {
   // カメラの状態
@@ -36,7 +32,6 @@ function HomeScene() {
     );
     setCommentList(commentResponse as Comment[]);
     setStampList(stampResponse as Stamp[]);
-    // console.log(commentResponse, stampResponse);
   };
 
   // Firebaseが変更されるとレンダリングするcommentListやstampListも更新する
@@ -87,17 +82,12 @@ function HomeScene() {
             text={item.text}
             key={index}
             position={[item.x, item.y, item.z]}
-            style={{ fontSize: 100, fontFamily: "NotoSansCJK" }}
+            style={{ fontSize: 50, fontFamily: "NotoSansCJK" }}
             color={item.color}
           />
         ))
       ) : (
-        <ViroText
-          text="Stamp Found"
-          position={[0, 0, -1]}
-          style={{ fontSize: 20 }}
-          color={"red"}
-        />
+        <ViroText text="Stamp Found" style={{ fontSize: 20 }} color={"red"} />
       )}
 
       {stampList ? (

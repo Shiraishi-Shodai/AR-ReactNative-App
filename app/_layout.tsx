@@ -23,7 +23,6 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    NotoSansJP: require("../assets/fonts/Noto_Sans_JP/NotoSansJP-Regular.ttf"),
     NotoSansCJK: require("../assets/fonts/NotoSansCJKJapanese/NotoSansCJKjp-Regular.otf"),
   });
 
