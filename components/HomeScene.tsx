@@ -103,7 +103,7 @@ function HomeScene() {
             text={item.text}
             key={index}
             position={[item.x, item.y, item.z]}
-            style={{ fontSize: 100 }}
+            style={{ fontSize: 100, fontFamily: "NotoSansCJK" }}
             color={"red"}
           />
         ))
