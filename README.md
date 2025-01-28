@@ -14,8 +14,6 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 ## 開発メンバー
 
-## Contributors
-
 <div style="display: flex; align-items: center;">
   <a href="https://github.com/Na7ti">
     <img src="https://github.com/Na7ti.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer1">
