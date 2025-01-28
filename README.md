@@ -14,11 +14,23 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 ## 開発メンバー
 
-- [Na7ti](https://github.com/Na7ti)
-- [Shiraishi-Shota](https://github.com/Shiraishi-Shodai)
-- [ruiki1024](https://github.com/ruiki1024)
-- [seiyazb](https://github.com/seiyazb)
-- [Kai15-kuro](https://github.com/Kai15-kuro)
+<div style="display: flex; align-items: center;">
+  <a href="https://github.com/Na7ti">
+    <img src="https://github.com/Na7ti.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer1">
+  </a>
+  <a href="https://github.com/Shiraishi-Shodai">
+    <img src="https://github.com/Shiraishi-Shodai.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer2">
+  </a>
+  <a href="https://github.com/ruiki1024">
+    <img src="https://github.com/ruiki1024.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+    <a href="https://github.com/seiyazb">
+    <img src="https://github.com/seiyazb.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+    <a href="https://github.com/Kai15-kuro">
+    <img src="https://github.com/Kai15-kuro.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+</div>
 
 ## 主な機能
 
@@ -61,6 +73,7 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 ---
 
 **これにより発生する問題**
+
 他の機能の実装がかなり遅れた。
 
 ---
@@ -78,7 +91,8 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 #### 3. Android アプリを開発するという選択
 
 **これにより発生する問題**
-チームの 5 人の内 2 人は Android デバイスを持っていなかったため、開発を思うように行えなかった。
+
+チームの 5 人の内 2 人は Android デバイスを持っていなかったため、開発を思うように進められなかった。
 
 ---
 
