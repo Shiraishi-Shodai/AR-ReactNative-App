@@ -18,19 +18,19 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 <div style="display: flex; align-items: center;">
   <a href="https://github.com/Na7ti">
-    <img src="https://avatars.githubusercontent.com/u/82674565?v=4" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer1">
+    <img src="https://avatars.githubusercontent.com/u/82674565?v=4" width="100" height="100" style="border-radius: 100%; margin-right: 10px;" alt="developer1">
   </a>
   <a href="https://github.com/Shiraishi-Shodai">
-    <img src="https://avatars.githubusercontent.com/u/119393129?v=4" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer2">
+    <img src="https://avatars.githubusercontent.com/u/119393129?v=4" width="100" height="100" style="border-radius: 100%; margin-right: 10px;" alt="developer2">
   </a>
   <a href="https://github.com/ruiki1024">
-    <img src="https://avatars.githubusercontent.com/u/139829018?v=4" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+    <img src="https://avatars.githubusercontent.com/u/139829018?v=4" width="100" height="100" style="border-radius: 100%; margin-right: 10px;" alt="developer3">
   </a>
     <a href="https://github.com/seiyazb">
-    <img src="https://avatars.githubusercontent.com/u/138343851?v=4" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+    <img src="https://avatars.githubusercontent.com/u/138343851?v=4" width="100" height="100" style="border-radius: 100%; margin-right: 10px;" alt="developer3">
   </a>
     <a href="https://github.com/Kai15-kuro">
-    <img src="https://avatars.githubusercontent.com/u/139828699?v=4" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+    <img src="https://avatars.githubusercontent.com/u/139828699?v=4" width="100" height="100" style="border-radius: 100%; margin-right: 10px;" alt="developer3">
   </a>
 </div>
 
