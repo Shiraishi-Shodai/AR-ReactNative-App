@@ -16,46 +16,23 @@ AR 上でコメントやスタンプを投稿できる SNS アプリ。
 
 ## Contributors
 
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="url(#developer1)" />
-  <defs>
-    <pattern id="developer1" patternUnits="userSpaceOnUse" width="100" height="100">
-      <image href="https://github.com/Na7ti.png" width="100" height="100" />
-    </pattern>
-  </defs>
-</svg>
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="url(#developer2)" />
-  <defs>
-    <pattern id="developer2" patternUnits="userSpaceOnUse" width="100" height="100">
-      <image href="https://github.com/Shiraishi-Shodai.png" width="100" height="100" />
-    </pattern>
-  </defs>
-</svg>
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="url(#developer3)" />
-  <defs>
-    <pattern id="developer3" patternUnits="userSpaceOnUse" width="100" height="100">
-      <image href="https://github.com/ruiki1024.png" width="100" height="100" />
-    </pattern>
-  </defs>
-</svg>
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="url(#developer4)" />
-  <defs>
-    <pattern id="developer4" patternUnits="userSpaceOnUse" width="100" height="100">
-      <image href="https://github.com/seiyazb.png" width="100" height="100" />
-    </pattern>
-  </defs>
-</svg>
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="url(#developer5)" />
-  <defs>
-    <pattern id="developer5" patternUnits="userSpaceOnUse" width="100" height="100">
-      <image href="https://github.com/Kai15-kuro.png" width="100" height="100" />
-    </pattern>
-  </defs>
-</svg>
+<div style="display: flex; align-items: center;">
+  <a href="https://github.com/Na7ti">
+    <img src="https://github.com/Na7ti.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer1">
+  </a>
+  <a href="https://github.com/Shiraishi-Shodai">
+    <img src="https://github.com/Shiraishi-Shodai.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer2">
+  </a>
+  <a href="https://github.com/ruiki1024">
+    <img src="https://github.com/ruiki1024.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+    <a href="https://github.com/seiyazb">
+    <img src="https://github.com/seiyazb.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+    <a href="https://github.com/Kai15-kuro">
+    <img src="https://github.com/Kai15-kuro.png" width="100" height="100" style="border-radius: 50%; margin-right: 10px;" alt="developer3">
+  </a>
+</div>
 
 ## 主な機能
 
